@@ -6,12 +6,14 @@ jobs :
     name : Lint code base
     runs-on : ubuntu-latest
     steps :
+        #Primo step
       - name : Checkout code
         uses : actions/checkout@v2
-      - name : Run Super-Linter
-        uses: github/super-linter@v3.17.0
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+        
+      #- name : Run Super-Linter
+       # uses: github/super-linter@v3.17.0
+       # with:
+        #  repo-token: ${{ secrets.GITHUB_TOKEN }}
         #env:
           #DEFAULT BRANCH : main
           #GITHUB TOKEN : $ { { secrets.GITHUB_TOKEN } }
