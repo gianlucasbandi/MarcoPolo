@@ -6,12 +6,16 @@ jobs :
     name : Lint code base
     runs-on : ubuntu-latest
     steps :
+        #Primo step
       - name : Checkout code
         uses : actions/checkout@v2
-      - name : Run Super-Linter
-        uses: github/super-linter@v3.17.0
+      
+        #Secondo step: avvio container
+      - name: Start containers 
+        run: docker-compose up -d --build
+        
+        #Terzo step
+      - name: Waiting for containers 
+        uses: jakejarvis/wait-action@master
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-        #env:
-          #DEFAULT BRANCH : main
-          #GITHUB TOKEN : $ { { secrets.GITHUB_TOKEN } }
+          time: '10s'
