@@ -9,6 +9,37 @@ services:
       restart: always
       networks:
         - app-network
+
+  node1:
+    build:
+      context: ./node
+    ports:
+     - "3000"
+    environment:
+      - ISTANCE= node1
+    networks:
+      - app-network
+
+  node2:
+    build:
+      context: ./node
+    ports:
+      - "3000"
+    environment:
+      - ISTANCE=node2
+    networks:
+      - app-network
+
+  node3:
+    build:
+      context: ./node
+    ports:
+      - "3000"
+    environment:
+      - ISTANCE=node3
+    networks:
+      - app-network
+      
 networks:
   app-network:
     driver: bridge
