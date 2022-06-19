@@ -16,7 +16,7 @@ services:
     ports:
      - "3000"
     environment:
-      - ISTANCE= node1
+      - ISTANCE=node1
     networks:
       - app-network
 
@@ -39,7 +39,7 @@ services:
       - ISTANCE=node3
     networks:
       - app-network
-      
+
 networks:
   app-network:
     driver: bridge
