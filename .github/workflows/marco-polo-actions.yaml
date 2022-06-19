@@ -9,11 +9,13 @@ jobs :
         #Primo step
       - name : Checkout code
         uses : actions/checkout@v2
+      
+        #Secondo step: avvio container
+      - name: Start containers 
+        run: docker-compose up -d --build
         
-      #- name : Run Super-Linter
-       # uses: github/super-linter@v3.17.0
-       # with:
-        #  repo-token: ${{ secrets.GITHUB_TOKEN }}
-        #env:
-          #DEFAULT BRANCH : main
-          #GITHUB TOKEN : $ { { secrets.GITHUB_TOKEN } }
+        #Terzo step
+      - name: Waiting for containers 
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '10s'
