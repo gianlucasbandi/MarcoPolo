@@ -1,0 +1,37 @@
+#main{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#header{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+#header h1{
+    margin-bottom: 0.2em;
+}
+
+#header p{
+    margin-top: 0;
+}
+
+#content{
+    display: flex;
+    flex-direction: column;
+    margin-top: 2em;
+    margin-bottom:2em;
+}
+
+#search{
+    text-align: center;
+}
+
+#utils{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
