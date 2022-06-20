@@ -4,7 +4,7 @@
   "description": "Bilanciamento tramite proxy server (nginx) su tre nodi",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx mocha --reporter spec"
   },
   "author": "Gianluca Sbandi & Claudio Schiavella & Mattia Russo",
   "license": "ISC",

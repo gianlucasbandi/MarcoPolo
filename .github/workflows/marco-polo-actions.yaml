@@ -33,5 +33,5 @@ jobs :
         run: npm install ./node
 
         #7 step
-      #- name: Start test
-
+      - name: Start test
+        run: npm test --prefix ./node
