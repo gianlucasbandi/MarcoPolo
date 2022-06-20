@@ -6,16 +6,32 @@ jobs :
     name : Lint code base
     runs-on : ubuntu-latest
     steps :
-        #Primo step
+        #1 step
       - name : Checkout code
         uses : actions/checkout@v2
       
-        #Secondo step: avvio container
+        #2 step: avvio container
       - name: Start containers 
         run: docker-compose up -d --build
         
-        #Terzo step
-      - name: Waiting for containers 
+        #3 step
+      - name: Wait containers start up
         uses: jakejarvis/wait-action@master
         with:
           time: '10s'
+
+        #4 step
+      - name: Install node
+        uses: actions/setup-node@v2
+
+        #5 step
+      - name: Install mocha
+        run: npm install -g mocha 
+
+        #6 step
+      - name: Install dependencies
+        run: npm install ./node
+
+        #7 step
+      #- name: Start test
+
