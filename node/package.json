@@ -11,8 +11,13 @@
   "dependencies": {
     "chai": "^4.3.6",
     "chai-http": "^4.3.0",
+    "dotenv": "^16.0.1",
     "express": "^4.17.3",
+    "express-session": "^1.17.3",
     "mocha": "^10.0.0",
-    "pug": "^3.0.2"
+    "pug": "^3.0.2",
+    "querystring": "^0.2.1",
+    "request": "^2.88.2",
+    "twit": "^2.2.11"
   }
 }

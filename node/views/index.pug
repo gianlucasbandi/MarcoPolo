@@ -16,7 +16,9 @@ html
           p Barra di ricerca 
         #utils
           if logged
-            a(href="https://localhost:8083/logout") Logout from Twitter 
+            p Benvenuto 
+              p= username
+              a(href="https://localhost:8083/logout") Logout from Twitter 
           else 
             a(href="https://localhost:8083/login") Login via Twitter
           p ChatBot 
