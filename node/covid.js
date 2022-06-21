@@ -2,12 +2,13 @@ const express = require('express')
 var request2server = require('request');
 const app = express();
 const port = 3000;
+
 app.use(express.json());
 
-app.get('/ita', function(req, res) {
-
+app.get('/nation', function(req, res) {
+    var tipo = 'ita'
     request2server({
-        url: 'https://corona.lmao.ninja/v2/countries/italia?strict',
+        url: 'https://corona.lmao.ninja/v2/countries/' + tipo + '?strict',
         method: 'GET',
     }, function(error, response, body) {
         if (error) {
