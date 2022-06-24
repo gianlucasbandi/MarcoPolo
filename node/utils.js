@@ -9,6 +9,9 @@ module.exports = {
     },
 
     getCovidData: function(json_string) {
-
+        var spl = json_string.split(",");
+        if (spl[0] === '{"message"') return -1;
+        var elem = spl.find(el => el.includes("todayCases"));
+        return elem.split(":")[1];
     }
 }
