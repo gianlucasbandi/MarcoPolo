@@ -46,7 +46,7 @@ app.get("/",(req,res)=>{
             utils.setCookie("user_id",body_data.user_id,res);
             utils.setCookie("user_name",body_data.screen_name,res);
     
-            res.render("index",{logged:true,username:body_data.user_name});
+            res.render("index",{logged:true,username:body_data.screen_name});
         });
     }
 
@@ -71,6 +71,17 @@ app.get("/login",(req,res)=>{
         });
     });
 });
+
+
+app.get("/logout",(req,res)=>{
+    res.clearCookie("oauth_token");
+    res.clearCookie("oauth_token_secret");
+    res.clearCookie("user_id");
+    res.clearCookie("user_name");
+    res.clearCookie("logged");
+    res.render("index",{logged:false});
+});
+
 
 app.listen(PORT,()=>{
     console.log("Applicazione in ascolto sulla porta "+PORT);
