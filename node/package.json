@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "name": "node",
   "version": "1.0.0",
   "description": "Bilanciamento tramite proxy server (nginx) su tre nodi",
@@ -24,26 +23,3 @@
     "twitter-api-v2": "^1.12.2"
   }
 }
-=======
-    "name": "node",
-    "version": "1.0.0",
-    "description": "Bilanciamento tramite proxy server (nginx) su tre nodi",
-    "main": "index.js",
-    "scripts": {
-        "test": "npx mocha --reporter spec"
-    },
-    "author": "Gianluca Sbandi & Claudio Schiavella & Mattia Russo",
-    "license": "ISC",
-    "dependencies": {
-        "chai": "^4.3.6",
-        "chai-http": "^4.3.0",
-        "cookie-parser": "^1.4.6",
-        "dotenv": "^16.0.1",
-        "express": "^4.17.3",
-        "express-session": "^1.17.3",
-        "mocha": "^10.0.0",
-        "pug": "^3.0.2",
-        "request": "^2.88.2"
-    }
-}
->>>>>>> 3fd45e14576a67cc2bd499b62e02b7b652d6a353
