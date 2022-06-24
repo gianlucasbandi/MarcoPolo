@@ -9,12 +9,15 @@ html
   body
     #main
       #header
-        h1 Marco Polo 
-        p Ricava info covid,post Twitter di interesse e info Maps relative alle città di tuo interesse
+        img(src="/pic/retrato-de-marco-polo-grabó-el-del-vector-con-contornos-la-tinta-comerciante-explorador-y-escritor-italianos-llevado-en-147633490.jpg")
+        div.txt
+          h1 Marco Polo 
+          p Ricava info covid,post Twitter di interesse e info Maps relative alle città di tuo interesse
+        img(src="/pic/retrato-de-marco-polo-grabó-el-del-vector-con-contornos-la-tinta-comerciante-explorador-y-escritor-italianos-llevado-en-147633490.jpg")
       #content 
         #search 
           form(action="https://localhost:8083/nation")
-            input(type="text", placeholder="Nazione", name="nat", value="") 
+            input(type="text", placeholder="Nazione", name="nat") 
             input(type="submit", value="Cerca!")
         #utils
           if logged
