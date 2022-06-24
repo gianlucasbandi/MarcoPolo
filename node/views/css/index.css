@@ -59,7 +59,7 @@ input[type='text'] {
     width: 40%;
     font-size: 2em;
     margin-bottom: 2%;
-    border-radius: 15px;
+    border-radius: 50px;
     padding: 1% 2% 1% 2%;
 }
 
@@ -73,7 +73,7 @@ input[type='submit'] {
 }
 
 input[type='text']:hover {
-    background: rgb(98, 181, 214);
+    background: rgb(134, 206, 235);
     color: black;
 }
 
