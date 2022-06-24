@@ -1,11 +1,11 @@
 /***********DIPENDENZE*************/
+require('dotenv').config();             //Per ricavare i token necessari per OAuth
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const request = require('request');
 const qs = require('querystring');            //Per effettuare parsing delle query URL
-var Twit = require('twit');                  //Per gestire le richieste REST di Twitter
-require('dotenv').config();                 //Per ricavare i token necessari per OAuth
+var Twit = require('twit');                  //Per gestire le richieste REST di Twitter               
 const utils = require("./utils");
 const bodyParser = require('body-parser');
 
@@ -76,19 +76,48 @@ app.get("/login",(req,res)=>{
 
 
 app.get('/nation', function(req, res) {
-    var tipo = req.originalUrl.split("=")[1];
+    //Ricavo i dati covid 
+    var country = req.originalUrl.split("=")[1];
+    var tweets;
+    var tweetsText;
+    var infoCovid;       
     request({
-        url: 'https://corona.lmao.ninja/v2/countries/' + tipo + '?strict',
+        url: 'https://corona.lmao.ninja/v2/countries/' + country + '?strict',
         method: 'GET',
     }, function(error, response, body) {
         if (error) {
             console.log(error);
         } else {
-            res.send(response.statusCode + " " + body);
+            //res.send(response.statusCode + " " + body);
+            infoCovid = body;
             console.log(response.statusCode, body)
             console.log(body.cases);
         }
     });
+
+    //Ricavo i tweet di quella zona
+    var T = new Twit({
+        consumer_key:         TWITTER_CONSUMER_KEY,
+        consumer_secret:      TWITTER_CONSUMER_SECRET,
+        access_token:         req.cookies.oauth_token,
+        access_token_secret:  req.cookies.oauth_token_secret,
+        timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
+        strictSSL:            true,     // optional - requires SSL certificates to be valid.
+    });
+
+
+    T.get('search/tweets',{q: "geocode:41.91050414219751,12.546073776149427,100km",count:5},function(err,data,response){
+        console.log(data);
+        //res.write(JSON.stringify(data));
+        for(let i = 0;i<data.statuses.length;i++){
+            tweets  += JSON.stringify(data.statuses[i]);
+            tweetsText += data.statuses[i].text+" ";
+        }
+        //res.write(tweets);
+        //res.write(tweetsText);
+        res.end("Ricerca finita");
+    });
+
 });
 
 
