@@ -29,10 +29,11 @@ app.get('/nation', function(req, res) {
         if (error) {
             console.log(error);
         } else {
-            res.send(response.statusCode + " " + body)
-            console.log(response.statusCode, body);
+            res.send(response.statusCode + " " + body);
+            console.log(response.statusCode, body)
+            console.log(body.cases);
         }
-    });;
+    });
 });
 
 app.listen(PORT, () => {
