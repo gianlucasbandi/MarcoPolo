@@ -13,7 +13,8 @@ html
         p Ricava info covid,post Twitter di interesse e info Maps relative alle città di tuo interesse
       #content 
         #search 
-          p Barra di ricerca 
+          form(action="https://localhost:8083/nation")
+            input(type="text", placeholder="Nazione", name="nat") 
         #utils
           if logged
             p Benvenuto 

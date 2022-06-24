@@ -7,6 +7,7 @@ const qs = require('querystring');            //Per effettuare parsing delle que
 var Twit = require('twit');                  //Per gestire le richieste REST di Twitter
 require('dotenv').config();                 //Per ricavare i token necessari per OAuth
 const utils = require("./utils");
+const bodyParser = require('body-parser');
 
 const PORT = 3000;
 const app = express();
@@ -21,7 +22,8 @@ const twitterOAuth = {
 //Gestione delle views tramite pug
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
-app.use(express.static(__dirname + '/views'));      //Usato per caricare i file statici (css)
+app.use(express.static(__dirname + '/views')); //Usato per caricare i file statici (css)
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.use(cookieParser());
@@ -69,6 +71,23 @@ app.get("/login",(req,res)=>{
             utils.setCookie("logged",true,res);
             res.end(body);
         });
+    });
+});
+
+
+app.get('/nation', function(req, res) {
+    var tipo = req.originalUrl.split("=")[1];
+    request({
+        url: 'https://corona.lmao.ninja/v2/countries/' + tipo + '?strict',
+        method: 'GET',
+    }, function(error, response, body) {
+        if (error) {
+            console.log(error);
+        } else {
+            res.send(response.statusCode + " " + body);
+            console.log(response.statusCode, body)
+            console.log(body.cases);
+        }
     });
 });
 
