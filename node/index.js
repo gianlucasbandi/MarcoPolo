@@ -52,7 +52,6 @@ app.get("/", (req, res) => {
     } else { //L'utente era già loggato
         res.render("index", { logged: true, username: req.cookies.user_name });
     }
-
 });
 
 

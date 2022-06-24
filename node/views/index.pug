@@ -14,7 +14,8 @@ html
       #content 
         #search 
           form(action="https://localhost:8083/nation")
-            input(type="text", placeholder="Nazione", name="nat") 
+            input(type="text", placeholder="Nazione", name="nat", value="") 
+            input(type="submit", value="Cerca!")
         #utils
           if logged
             p Benvenuto 

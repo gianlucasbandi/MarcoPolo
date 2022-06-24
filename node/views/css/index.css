@@ -1,37 +1,61 @@
-#main{
+#main {
     display: flex;
     flex-direction: column;
     height: 100%;
 }
 
-#header{
+#header {
     text-align: center;
     display: flex;
     flex-direction: column;
 }
 
-#header h1{
+#header h1 {
     margin-bottom: 0.2em;
 }
 
-#header p{
+#header p {
     margin-top: 0;
 }
 
-#content{
+#content {
     display: flex;
     flex-direction: column;
     margin-top: 2em;
-    margin-bottom:2em;
+    margin-bottom: 2em;
 }
 
-#search{
+#search {
     text-align: center;
 }
 
-#utils{
+#utils {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+form {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center;
+    padding: 2%;
+}
+
+input[type='text'] {
+    width: 40%;
+    font-size: 2em;
+    margin-bottom: 2%;
+    border-radius: 15px;
+    padding: 1% 2% 1% 2%;
+}
+
+input[type='submit'] {
+    width: 20%;
+    font-size: 2em;
+    margin-bottom: 2%;
+    border-radius: 15px;
+    padding: 1% 2% 1% 2%;
+    cursor: pointer;
 }
