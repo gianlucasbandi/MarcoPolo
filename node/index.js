@@ -1,24 +1,19 @@
 /***********DIPENDENZE*************/
-require('dotenv').config();             //Per ricavare i token necessari per OAuth
+require('dotenv').config();                    
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-const request = require('request');
-const qs = require('querystring');            //Per effettuare parsing delle query URL
-var Twit = require('twit');                  //Per gestire le richieste REST di Twitter               
+const request = require('request');             
+const qs = require('querystring');            //To make request parsing
+var Twit = require('twit');                  //To manage twitter request            
 const utils = require("./utils");
 const bodyParser = require('body-parser');
-var OAuth = require('oauth');               //Per gestire la procedura oauth twitter
+var OAuth = require('oauth');               //Twitter OAuth
 
 const PORT = 3000;
 const app = express();
 const { TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_CALL_BACK_URL } = process.env;   //Rivavo le credenziali Twitter
 
-/*const twitterOAuth = {
-    callback: TWITTER_CALL_BACK_URL,
-    consumer_key: TWITTER_CONSUMER_KEY,
-    consumer_secret: TWITTER_CONSUMER_SECRET
-}*/
 var TwitterOAuth = new OAuth.OAuth(
     'https://api.twitter.com/oauth/request_token',
     'https://api.twitter.com/oauth/access_token',
