@@ -1,26 +1,31 @@
 /***********DIPENDENZE*************/
+require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const request = require('request');
 const qs = require('querystring'); //Per effettuare parsing delle query URL
 var Twit = require('twit'); //Per gestire le richieste REST di Twitter
-require('dotenv').config(); //Per ricavare i token necessari per OAuth
 const utils = require("./utils");
 const bodyParser = require('body-parser');
 const { getCovidData } = require('./utils');
 let nodeGeocoder = require('node-geocoder');
 const cc = require('country-state-picker');
+var OAuth = require('oauth'); //Twitter OAuth
 
 const PORT = 3000;
 const app = express();
 const { TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_CALL_BACK_URL } = process.env; //Rivavo le credenziali Twitter
-const twitterOAuth = {
-    callback: TWITTER_CALL_BACK_URL,
-    consumer_key: TWITTER_CONSUMER_KEY,
-    consumer_secret: TWITTER_CONSUMER_SECRET
-}
 
+var TwitterOAuth = new OAuth.OAuth(
+    'https://api.twitter.com/oauth/request_token',
+    'https://api.twitter.com/oauth/access_token',
+    TWITTER_CONSUMER_KEY,
+    TWITTER_CONSUMER_SECRET,
+    '1.0A',
+    TWITTER_CALL_BACK_URL,
+    'HMAC-SHA1'
+);
 
 
 let options = {
@@ -42,10 +47,10 @@ app.use(cookieParser());
 /***********ROUTES*************/
 //Pagina iniziale
 app.get("/", (req, res) => {
-    if (req.cookies.logged == undefined) { //Utente non loggato
+    if (req.cookies.logged == undefined) { //User not logged
         res.render("index", { logged: false });
-    } else if (req.cookies.user_name == undefined) { //Devo ancora completare la fase 3 di OAuth
-        //3 step : ottenimento token
+    } else if (req.cookies.user_name == undefined) {
+        //3 step: getting final token
         const req_data = qs.parse(req);
         var url = "https://api.twitter.com/oauth/access_token?oauth_token=" + req.query.oauth_token + "&oauth_verifier=" + req.query.oauth_verifier;
         request.post({ url: url }, (e, r, body) => {
@@ -58,24 +63,24 @@ app.get("/", (req, res) => {
 
             res.render("index", { logged: true, username: body_data.screen_name });
         });
-    } else { //L'utente era già loggato
+    } else { //User already logged
         res.render("index", { logged: true, username: req.cookies.user_name });
     }
 });
 
 
 app.get("/login", (req, res) => {
-    //1 step: acquisizione access_token
-    var url = "https://api.twitter.com/oauth/request_token";
-    request.post({ url: url, oauth: twitterOAuth }, (e, r, body) => {
-        const req_data = qs.parse(body);
-
-        //2 step: autorizzazione resource owner
-        url = "https://api.twitter.com/oauth/authorize?oauth_token=" + req_data.oauth_token;
-        request.get({ uri: url }, (e, r, body) => {
+    //1 step: getting request token
+    TwitterOAuth.getOAuthRequestToken((error, oauthRequestToken, oauthRequestTokenSecret) => {
+        const method = 'authorize';
+        if (error) {
+            console.log(error);
+        } else {
+            //2 step: getting authorization from resource owner
+            const authorizationUrl = `https://api.twitter.com/oauth/${method}?oauth_token=${oauthRequestToken}`;
             utils.setCookie("logged", true, res);
-            res.end(body);
-        });
+            res.redirect(authorizationUrl);
+        }
     });
 });
 
@@ -111,6 +116,29 @@ app.get("/nation", function(req, res) {
         .catch((err) => {
             res.render("index", { error: "La città inserita non esiste" });
         });
+    //Ricavo i tweet di quella zona
+    var T = new Twit({
+        consumer_key: TWITTER_CONSUMER_KEY,
+        consumer_secret: TWITTER_CONSUMER_SECRET,
+        access_token: req.cookies.oauth_token,
+        access_token_secret: req.cookies.oauth_token_secret,
+        timeout_ms: 60 * 1000, // optional HTTP request timeout to apply to all requests.
+        strictSSL: true, // optional - requires SSL certificates to be valid.
+    });
+
+
+    T.get('search/tweets', { q: "geocode:41.91050414219751,12.546073776149427,100km", count: 5 }, function(err, data, response) {
+        console.log(data);
+        //res.write(JSON.stringify(data));
+        for (let i = 0; i < data.statuses.length; i++) {
+            tweets += JSON.stringify(data.statuses[i]);
+            tweetsText += data.statuses[i].text + " ";
+        }
+        //res.write(tweets);
+        //res.write(tweetsText);
+        res.end("Ricerca finita");
+    });
+
 });
 
 
