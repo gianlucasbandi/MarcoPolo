@@ -83,10 +83,10 @@ app.get("/nation", function(req, res) {
             console.log(response);
             if (body.split(":")[0].includes("message") == true) {
                 var cases = 'ko';
-                res.render("home", { covidCases: cases });
+                res.render("home", { city: place, nation: "soon", covidCases: cases });
             } else {
                 var cases = getCovidData(body);
-                res.render("home", { covidCases: cases });
+                res.render("home", { city: place, nation: "soon", covidCases: cases });
             }
         }
     });
