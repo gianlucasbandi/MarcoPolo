@@ -83,15 +83,16 @@ app.get("/nation", function(req, res) {
     var cases;
     var nat;
 
-    /*geoCoder.geocode(city)
-        .then((res) => {
-            nat = res[0].country;
+    geoCoder.geocode(city)
+        .then((result) => {
+            nat = result[0].country;
+            res.end(city + " " + nat);
         })
         .catch((err) => {
             res.render("index", { error: "La città inserita non esiste" });
         });
 
-    request({
+    /*request({
         url: 'https://corona.lmao.ninja/v2/countries/' + nat + '?strict',
         method: 'GET',
     }, function(error, response, body) {
