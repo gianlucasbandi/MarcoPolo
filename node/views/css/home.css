@@ -1,3 +1,62 @@
 h1 {
     font-size: 35px;
 }
+
+#main {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 3% 2% 3% 3%;
+}
+
+#data {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.covid {
+    width: 100%;
+    height: 20%;
+    margin-top: 4%;
+    margin-right: 3%;
+    display: flex;
+    flex-direction: row;
+    column-gap: 15%;
+    background-color: red;
+    border-radius: 15px;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+.covid h1 {
+    font-size: 2em;
+}
+
+.tweets {
+    background-color: aqua;
+    width: 100%;
+    height: 80%;
+    padding: 24% 1% 23% 1%;
+    margin-right: 3%;
+    border-radius: 15px;
+}
+
+#maps {
+    background-color: orange;
+    width: 50%;
+    height: 100%;
+    padding-top: 15%;
+    padding-bottom: 15%;
+    border-radius: 15px;
+}
+
+.city,
+.nation,
+.stats {
+    display: flex;
+    flex-direction: row;
+}
