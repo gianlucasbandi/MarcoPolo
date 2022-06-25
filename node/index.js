@@ -73,7 +73,6 @@ app.get("/login", (req, res) => {
 
 app.get("/nation", function(req, res) {
     var place = req.originalUrl.split("=")[1];
-    var cases;
     request({
         url: 'https://corona.lmao.ninja/v2/countries/' + place + '?strict',
         method: 'GET',
@@ -83,13 +82,14 @@ app.get("/nation", function(req, res) {
         } else {
             console.log(response);
             if (body.split(":")[0].includes("message") == true) {
-                cases = 'ko';
+                var cases = 'ko';
+                res.render("home", { covidCases: cases });
             } else {
-                cases = getCovidData(body);
+                var cases = getCovidData(body);
+                res.render("home", { covidCases: cases });
             }
         }
     });
-    res.render("home", { covidCases: cases });
 });
 
 
