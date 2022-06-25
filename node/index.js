@@ -19,6 +19,13 @@ const twitterOAuth = {
     consumer_secret: TWITTER_CONSUMER_SECRET
 }
 
+let nodeGeocoder = require('node-geocoder');
+
+let options = {
+    provider: 'openstreetmap',
+};
+
+let geoCoder = nodeGeocoder(options);
 
 //Gestione delle views tramite pug
 app.set("views", path.join(__dirname, "views"));
@@ -72,9 +79,20 @@ app.get("/login", (req, res) => {
 
 
 app.get("/nation", function(req, res) {
-    var place = req.originalUrl.split("=")[1];
+    var city = req.originalUrl.split("=")[1];
+    var cases;
+    var nat;
+
+    /*geoCoder.geocode(city)
+        .then((res) => {
+            nat = res[0].country;
+        })
+        .catch((err) => {
+            res.render("index", { error: "La città inserita non esiste" });
+        });
+
     request({
-        url: 'https://corona.lmao.ninja/v2/countries/' + place + '?strict',
+        url: 'https://corona.lmao.ninja/v2/countries/' + nat + '?strict',
         method: 'GET',
     }, function(error, response, body) {
         if (error) {
@@ -82,14 +100,14 @@ app.get("/nation", function(req, res) {
         } else {
             console.log(response);
             if (body.split(":")[0].includes("message") == true) {
-                var cases = 'ko';
-                res.render("home", { city: place, nation: "soon", covidCases: cases });
+                cases = 'ko';
+                res.render("home", { city: city, nation: nat, covidCases: cases });
             } else {
-                var cases = getCovidData(body);
-                res.render("home", { city: place, nation: "soon", covidCases: cases });
+                cases = getCovidData(body);
+                res.render("home", { city: city, nation: nat, covidCases: cases });
             }
         }
-    });
+    });*/
 });
 
 

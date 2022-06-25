@@ -17,7 +17,7 @@ html
       #content 
         #search 
           form(action="https://localhost:8083/nation")
-            input(type="text", placeholder="Nazione", name="nat") 
+            input(type="text", placeholder="Inserisci una città", name="nat") 
             input(type="submit", value="Cerca!")
         #utils
           if logged
@@ -27,3 +27,4 @@ html
           else 
             a(href="https://localhost:8083/login") Login via Twitter
           p ChatBot 
+          p= error
