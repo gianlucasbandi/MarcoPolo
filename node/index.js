@@ -107,24 +107,6 @@ app.get("/nation", function(req, res) {
         .catch((err) => {
             res.render("index", { error: "La città inserita non esiste" });
         });
-
-    /*request({
-        url: 'https://corona.lmao.ninja/v2/countries/' + nat + '?strict',
-        method: 'GET',
-    }, function(error, response, body) {
-        if (error) {
-            res.end(error);
-        } else {
-            console.log(response);
-            if (body.split(":")[0].includes("message") == true) {
-                cases = 'ko';
-                res.render("home", { city: city, nation: nat, covidCases: cases });
-            } else {
-                cases = getCovidData(body);
-                res.render("home", { city: city, nation: nat, covidCases: cases });
-            }
-        }
-    });*/
 });
 
 

@@ -5,7 +5,7 @@ let options = {
 };
 
 let geoCoder = nodeGeocoder(options);
-geoCoder.geocode('roma')
+geoCoder.geocode('pechino')
     .then((res) => {
         console.log(res);
         console.log(res[0].country);
