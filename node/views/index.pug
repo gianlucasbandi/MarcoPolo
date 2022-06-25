@@ -25,9 +25,10 @@ html
           if logged
             p Benvenuto 
               p= username
-              a(href="https://localhost:8083/logout") Logout from Twitter 
+              a(class="outbtn", href="https://localhost:8083/logout") Logout from Twitter 
+                i.fa-solid.fa-arrow-right-from-bracket
           else 
-            a(class="logbtn", href="https://localhost:8083/login") Accedi con Twitter!             
+            a(class="logbtn", href="https://localhost:8083/login") Accedi con Twitter!              
               i.fa-brands.fa-twitter
           p ChatBot 
           p= error
