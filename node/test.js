@@ -1,17 +1,5 @@
-let nodeGeocoder = require('node-geocoder');
+const cc = require('country-state-picker');
 
-let options = {
-    provider: 'openstreetmap',
-};
+let country = cc.getCountry('CZ');
 
-let geoCoder = nodeGeocoder(options);
-geoCoder.geocode('pechino')
-    .then((res) => {
-        console.log(res);
-        console.log(res[0].country);
-        console.log(res[0].latitude);
-        console.log(res[0].longitude);
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+console.log(country.name)

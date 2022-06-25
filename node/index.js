@@ -9,6 +9,8 @@ require('dotenv').config(); //Per ricavare i token necessari per OAuth
 const utils = require("./utils");
 const bodyParser = require('body-parser');
 const { getCovidData } = require('./utils');
+let nodeGeocoder = require('node-geocoder');
+const cc = require('country-state-picker');
 
 const PORT = 3000;
 const app = express();
@@ -19,7 +21,7 @@ const twitterOAuth = {
     consumer_secret: TWITTER_CONSUMER_SECRET
 }
 
-let nodeGeocoder = require('node-geocoder');
+
 
 let options = {
     provider: 'openstreetmap',
@@ -81,25 +83,27 @@ app.get("/login", (req, res) => {
 app.get("/nation", function(req, res) {
     var city = req.originalUrl.split("=")[1];
     var cases;
+    var codNat;
     var nat;
 
     geoCoder.geocode(city)
         .then((result) => {
-            nat = result[0].country;
+            codNat = result[0].countryCode;
             request({
-                url: 'https://corona.lmao.ninja/v2/countries/' + nat + '?strict',
+                url: 'https://corona.lmao.ninja/v2/countries/' + codNat + '?strict',
                 method: 'GET',
             }, function(error, response, body) {
                 if (error) {
                     res.end(error);
                 } else {
+                    nat = cc.getCountry(codNat);
                     console.log(response);
                     if (body.split(":")[0].includes("message") == true) {
                         cases = 'ko';
-                        res.render("home", { city: city, nation: nat, covidCases: cases });
+                        res.render("home", { city: city, nation: nat.name, covidCases: cases });
                     } else {
                         cases = getCovidData(body);
-                        res.render("home", { city: city, nation: nat, covidCases: cases });
+                        res.render("home", { city: city, nation: nat.name, covidCases: cases });
                     }
                 }
             });
