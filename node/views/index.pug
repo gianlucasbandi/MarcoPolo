@@ -4,6 +4,7 @@ html
     meta(charset="utf-8")
     link(rel='icon' href='pic/mp.ico' type='image/icon type')
     link(rel='stylesheet', href='/css/index.css')
+    script(src='https://kit.fontawesome.com/d8697e016e.js' crossorigin='anonymous')
     meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
     title MarcoPolo
   body
@@ -16,15 +17,17 @@ html
         img(src="/pic/mp.jpg")
       #content 
         #search 
-          form(action="https://localhost:8083/nation")
-            input(type="text", placeholder="Inserisci una città", name="nat", autocomplete="off") 
-            input(type="submit", value="Cerca!")
+          if logged 
+            form(action="https://localhost:8083/nation")
+              input(type="text", placeholder="Inserisci una città", name="nat", autocomplete="off") 
+              input(type="submit", value="Cerca!")
         #utils
           if logged
             p Benvenuto 
               p= username
               a(href="https://localhost:8083/logout") Logout from Twitter 
           else 
-            a(href="https://localhost:8083/login") Login via Twitter
+            a(class="btn", href="https://localhost:8083/login") Accedi con Twitter!             
+              i.fa-brands.fa-twitter
           p ChatBot 
           p= error
