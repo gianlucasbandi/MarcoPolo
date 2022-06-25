@@ -8,16 +8,26 @@ const qs = require('querystring');            //Per effettuare parsing delle que
 var Twit = require('twit');                  //Per gestire le richieste REST di Twitter               
 const utils = require("./utils");
 const bodyParser = require('body-parser');
+var OAuth = require('oauth');               //Per gestire la procedura oauth twitter
 
 const PORT = 3000;
 const app = express();
 const { TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_CALL_BACK_URL } = process.env;   //Rivavo le credenziali Twitter
-const twitterOAuth = {
+
+/*const twitterOAuth = {
     callback: TWITTER_CALL_BACK_URL,
     consumer_key: TWITTER_CONSUMER_KEY,
     consumer_secret: TWITTER_CONSUMER_SECRET
-}
-
+}*/
+var TwitterOAuth = new OAuth.OAuth(
+    'https://api.twitter.com/oauth/request_token',
+    'https://api.twitter.com/oauth/access_token',
+    TWITTER_CONSUMER_KEY,
+    TWITTER_CONSUMER_SECRET,
+    '1.0A',
+    TWITTER_CALL_BACK_URL,
+    'HMAC-SHA1'
+);
 
 //Gestione delle views tramite pug
 app.set("views", path.join(__dirname, "views"));
@@ -32,27 +42,27 @@ app.use(cookieParser());
 /***********ROUTES*************/
 //Pagina iniziale
 app.get("/",(req,res)=>{
-    if(req.cookies.logged == undefined){     //Utente non loggato
+    if(req.cookies.logged == undefined){     //User not logged
         res.render("index",{logged:false});
     }
     
-    else if(req.cookies.user_name == undefined){     //Devo ancora completare la fase 3 di OAuth
-        //3 step : ottenimento token
+    else if(req.cookies.user_name == undefined){ 
+        //3 step: getting final token
         const req_data = qs.parse(req);
         var url = "https://api.twitter.com/oauth/access_token?oauth_token="+req.query.oauth_token+"&oauth_verifier="+req.query.oauth_verifier;
         request.post({url:url},(e,r,body)=>{
             const body_data = qs.parse(body);
-
+            
             utils.setCookie("oauth_token",body_data.oauth_token,res);
             utils.setCookie("oauth_token_secret",body_data.oauth_token_secret,res);
             utils.setCookie("user_id",body_data.user_id,res);
             utils.setCookie("user_name",body_data.screen_name,res);
-    
+
             res.render("index",{logged:true,username:body_data.screen_name});
         });
     }
 
-    else{                                   //L'utente era già loggato
+    else{                                  //User already logged
         res.render("index",{logged:true,username:req.cookies.user_name});
     }
     
@@ -60,18 +70,19 @@ app.get("/",(req,res)=>{
 
 
 app.get("/login",(req,res)=>{
-    //1 step: acquisizione access_token
-    var url = "https://api.twitter.com/oauth/request_token";
-    request.post({url:url,oauth:twitterOAuth},(e,r,body)=>{
-        const req_data = qs.parse(body);
-        
-        //2 step: autorizzazione resource owner
-        url = "https://api.twitter.com/oauth/authorize?oauth_token="+req_data.oauth_token;
-        request.get({uri:url},(e,r,body)=>{
+   //1 step: getting request token
+   TwitterOAuth.getOAuthRequestToken((error,oauthRequestToken,oauthRequestTokenSecret)=>{
+        const method = 'authorize';
+        if(error){
+            console.log(error);
+        }
+        else{
+            //2 step: getting authorization from resource owner
+            const authorizationUrl =  `https://api.twitter.com/oauth/${method}?oauth_token=${oauthRequestToken}`;
             utils.setCookie("logged",true,res);
-            res.end(body);
-        });
-    });
+            res.redirect(authorizationUrl);
+        }
+   });
 });
 
 
