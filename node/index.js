@@ -71,25 +71,25 @@ app.get("/login", (req, res) => {
 });
 
 
-app.get('/nation', function(req, res) {
-    var tipo = req.originalUrl.split("=")[1];
+app.get("/nation", function(req, res) {
+    var place = req.originalUrl.split("=")[1];
+    var cases;
     request({
-        url: 'https://corona.lmao.ninja/v2/countries/' + tipo + '?strict',
+        url: 'https://corona.lmao.ninja/v2/countries/' + place + '?strict',
         method: 'GET',
     }, function(error, response, body) {
         if (error) {
             res.end(error);
-            console.log(error);
         } else {
             console.log(response);
             if (body.split(":")[0].includes("message") == true) {
-                res.end('ko');
+                cases = 'ko';
             } else {
-                var cases = getCovidData(body);
-                res.end(cases);
+                cases = getCovidData(body);
             }
         }
     });
+    res.render("home", { covidCases: cases });
 });
 
 
