@@ -105,39 +105,41 @@ app.get("/nation", function(req, res) {
                     console.log(response);
                     if (body.split(":")[0].includes("message") == true) {
                         cases = 'ko';
-                        res.render("home", { city: city, nation: nat.name, covidCases: cases });
                     } else {
                         cases = getCovidData(body);
-                        res.render("home", { city: city, nation: nat.name, covidCases: cases });
                     }
+                    var T = new Twit({
+                        consumer_key: TWITTER_CONSUMER_KEY,
+                        consumer_secret: TWITTER_CONSUMER_SECRET,
+                        access_token: req.cookies.oauth_token,
+                        access_token_secret: req.cookies.oauth_token_secret,
+                        //timeout_ms: 60 * 1000, // optional HTTP request timeout to apply to all requests.
+                        strictSSL: true, // optional - requires SSL certificates to be valid.
+                    });
+
+
+                    T.get('search/tweets', { q: nat.name, count: 5 }, function(err, data, response) {
+                        //console.log(data);
+                        //res.write(JSON.stringify(data));
+                        var tweets;
+                        var tweetsText;
+                        for (let i = 0; i < data.statuses.length; i++) {
+                            tweets += JSON.stringify(data.statuses[i]);
+                            tweetsText += data.statuses[i].text + " ";
+                        }
+                        //res.write(tweets);
+                        //res.write(tweetsText);
+                        //res.end("Ricerca finita");
+                    });
+                    res.render("home", { city: city, nation: nat.name, covidCases: cases });
                 }
             });
         })
         .catch((err) => {
             res.render("index", { error: "La città inserita non esiste" });
         });
+
     //Ricavo i tweet di quella zona
-    var T = new Twit({
-        consumer_key: TWITTER_CONSUMER_KEY,
-        consumer_secret: TWITTER_CONSUMER_SECRET,
-        access_token: req.cookies.oauth_token,
-        access_token_secret: req.cookies.oauth_token_secret,
-        timeout_ms: 60 * 1000, // optional HTTP request timeout to apply to all requests.
-        strictSSL: true, // optional - requires SSL certificates to be valid.
-    });
-
-
-    T.get('search/tweets', { q: "geocode:41.91050414219751,12.546073776149427,100km", count: 5 }, function(err, data, response) {
-        console.log(data);
-        //res.write(JSON.stringify(data));
-        for (let i = 0; i < data.statuses.length; i++) {
-            tweets += JSON.stringify(data.statuses[i]);
-            tweetsText += data.statuses[i].text + " ";
-        }
-        //res.write(tweets);
-        //res.write(tweetsText);
-        res.end("Ricerca finita");
-    });
 
 });
 
