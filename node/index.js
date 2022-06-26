@@ -100,6 +100,8 @@ app.get("/nation", function(req, res) {
     var cases;
     var codNat;
     var nat;
+    var tweets;
+    var tweetsText;
 
     geoCoder.geocode(city)
         .then((result) => {
@@ -128,11 +130,10 @@ app.get("/nation", function(req, res) {
                     });
 
 
-                    T.get('search/tweets', { q: nat.name, count: 5 }, function(err, data, response) {
+                    T.get('search/tweets', { q: city, count: 5 }, function(err, data, response) {
                         //console.log(data);
                         //res.write(JSON.stringify(data));
-                        var tweets;
-                        var tweetsText;
+
                         for (let i = 0; i < data.statuses.length; i++) {
                             tweets += JSON.stringify(data.statuses[i]);
                             tweetsText += data.statuses[i].text + " ";
@@ -141,7 +142,7 @@ app.get("/nation", function(req, res) {
                         //res.write(tweetsText);
                         //res.end("Ricerca finita");
                     });
-                    res.render("home", { city: city, nation: nat.name, covidCases: cases });
+                    res.render("home", { city: city, nation: nat.name, covidCases: cases, out: tweetsText });
                 }
             });
         })

@@ -4,13 +4,14 @@ html
     meta(charset="utf-8")
     link(rel='icon' href='pic/mp.ico' type='image/icon type')
     link(rel='stylesheet', href='/css/home.css')
+    script(src='https://kit.fontawesome.com/d8697e016e.js' crossorigin='anonymous')
     meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
     title MarcoPolo
   body
     #main
         #data
             .tweets            
-                h1 Qui ci vanno i tweets
+                h1= out
             .covid
                 .city
                   h1 Città:
@@ -23,4 +24,7 @@ html
                   h1= covidCases
         #maps
             h1 Qui ci va la mappa
-    
+            
+    #back
+      a(class="back-btn", href="https://localhost:8083") Fai un'altra ricerca! 
+        i.fas.fa-redo
