@@ -2,24 +2,33 @@ doctype html
 html
   head
     meta(charset="utf-8")
-    link(rel="shortcut icon", href="/favicon.ico")
+    link(rel='icon' href='pic/mp.ico' type='image/icon type')
     link(rel='stylesheet', href='/css/index.css')
+    script(src='https://kit.fontawesome.com/d8697e016e.js' crossorigin='anonymous')
     meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
     title MarcoPolo
   body
     #main
       #header
-        h1 Marco Polo 
-        p Ricava info covid,post Twitter di interesse e info Maps relative alle città di tuo interesse
+        img(src="/pic/mp.jpg")
+        div.txt
+          h1 Marco Polo 
+          p Ricava info covid nazionali,post Twitter di interesse e info Maps relative alle città di tuo interesse
+        img(src="/pic/mp.jpg")
       #content 
         #search 
-          form(action="https://localhost:8083/nation")
-            input(type="text", placeholder="Nazione", name="nat") 
+          if logged 
+            form(action="https://localhost:8083/nation")
+              input(type="text", placeholder="Inserisci una città", name="nat", autocomplete="off") 
+              input(type="submit", value="Cerca!")
         #utils
           if logged
             p Benvenuto 
               p= username
-              a(href="https://localhost:8083/logout") Logout from Twitter 
+              a(class="outbtn", href="https://localhost:8083/logout") Logout from Twitter 
+                i.fa-solid.fa-arrow-right-from-bracket
           else 
-            a(href="https://localhost:8083/login") Login via Twitter
+            a(class="logbtn", href="https://localhost:8083/login") Accedi con Twitter!              
+              i.fa-brands.fa-twitter
           p ChatBot 
+          p= error
