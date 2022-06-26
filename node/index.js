@@ -147,7 +147,7 @@ app.get("/nation", function(req, res) {
             });
         })
         .catch((err) => {
-            res.render("index", { error: "La città inserita non esiste" });
+            res.render("index", { error: "La città inserita non esiste",logged:req.session.logged,username:req.session.user_name});
         });
 
 });
@@ -155,11 +155,7 @@ app.get("/nation", function(req, res) {
 
 //Twitter logout
 app.get("/logout",(req,res)=>{
-    res.clearCookie("oauth_token");
-    res.clearCookie("oauth_token_secret");
-    res.clearCookie("user_id");
-    res.clearCookie("user_name");
-    res.clearCookie("logged");
+    req.session.destroy();
     res.render("index", { logged: false });
 });
 

@@ -18,8 +18,9 @@ html
       #content 
         #search 
           if logged 
-            form(action="https://localhost:8083/nation")
-              input(type="text", placeholder="Inserisci una città", name="nat", autocomplete="off") 
+            form(action="https://localhost:8083/nation" method = "GET")
+              input(type="text", placeholder="Inserisci una città", name="nat", autocomplete="off" required)
+              p= error 
               input(type="submit", value="Cerca!")
         #utils
           if logged
@@ -31,4 +32,4 @@ html
             a(class="logbtn", href="https://localhost:8083/login") Accedi con Twitter!              
               i.fa-brands.fa-twitter
           p ChatBot 
-          p= error
+          
