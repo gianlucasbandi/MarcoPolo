@@ -1,3 +1,7 @@
+body {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
 h1 {
     font-size: 35px;
 }
@@ -59,4 +63,25 @@ h1 {
 .stats {
     display: flex;
     flex-direction: row;
+}
+
+#back {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-btn {
+    background: rgb(225, 232, 237);
+    border-radius: 15px;
+    padding: 1% 1% 1% 1%;
+    color: rgb(29, 161, 242);
+    text-decoration: none;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+    transition: 0.5s;
+}
+
+.back-btn:hover {
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
