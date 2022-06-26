@@ -1,22 +1,22 @@
 /***********DIPENDENZE*************/
 require('dotenv').config();
 const express = require('express');
-const cookieParser = require('cookie-parser');
 const path = require('path');
 const request = require('request');
-const qs = require('querystring'); //Per effettuare parsing delle query URL
-var Twit = require('twit'); //Per gestire le richieste REST di Twitter
+const qs = require('querystring');                  //To manage URL parsing
+var Twit = require('twit');                         //To use twitter api
 const utils = require("./utils");
 const bodyParser = require('body-parser');
 const { getCovidData } = require('./utils');
 let nodeGeocoder = require('node-geocoder');
 const cc = require('country-state-picker');
-var OAuth = require('oauth'); //Twitter OAuth
+var OAuth = require('oauth');                           //Twitter OAuth
+var session = require('express-session');
+
 
 const PORT = 3000;
 const app = express();
 const { TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_CALL_BACK_URL } = process.env; //Rivavo le credenziali Twitter
-
 var TwitterOAuth = new OAuth.OAuth(
     'https://api.twitter.com/oauth/request_token',
     'https://api.twitter.com/oauth/access_token',
@@ -32,40 +32,47 @@ let options = {
     provider: 'openstreetmap',
 };
 
+
 let geoCoder = nodeGeocoder(options);
 
-//Gestione delle views tramite pug
+
+//Getting static file and pug's views
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
-app.use(express.static(__dirname + '/views')); //Usato per caricare i file statici (css)
+app.use(express.static(__dirname + '/views')); 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.use(session({
+    name: "MarcoPolo",
+    secret: 'MarcoPoloSecret',
+    resave: false,
+    saveUninitialized: false,
+}));
 
 
 /***********ROUTES*************/
 //Index page
 app.get("/",(req,res)=>{
-    if(req.cookies.logged == undefined){     //User not logged
+    if(req.session.logged == undefined){     //User not logged
         res.render("index",{logged:false});
     }
     
-    else if(req.cookies.user_name == undefined){ 
+    else if(req.session.user_name == undefined){ 
         //3 step: getting final token
         const req_data = qs.parse(req);
         var url = "https://api.twitter.com/oauth/access_token?oauth_token=" + req.query.oauth_token + "&oauth_verifier=" + req.query.oauth_verifier;
         request.post({ url: url }, (e, r, body) => {
             const body_data = qs.parse(body);
-
-            utils.setCookie("oauth_token", body_data.oauth_token, res);
-            utils.setCookie("oauth_token_secret", body_data.oauth_token_secret, res);
-            utils.setCookie("user_id", body_data.user_id, res);
-            utils.setCookie("user_name", body_data.screen_name, res);
+            req.session.oauth_token = body_data.oauth_token;
+            req.session.oauth_token_secret = body_data.oauth_token_secret;
+            req.session.user_id = body_data.user_id;
+            req.session.user_name = body_data.screen_name;
 
             res.render("index", { logged: true, username: body_data.screen_name });
         });
     } else { //User already logged
-        res.render("index", { logged: true, username: req.cookies.user_name });
+        res.render("index", { logged: true, username: req.session.user_name });
     }
+    
 });
 
 
@@ -80,7 +87,7 @@ app.get("/login",(req,res)=>{
         else{
             //2 step: getting authorization from resource owner
             const authorizationUrl =  `https://api.twitter.com/oauth/${method}?oauth_token=${oauthRequestToken}`;
-            utils.setCookie("logged",true,res);
+            req.session.logged = true;
             res.redirect(authorizationUrl);
         }
    });
@@ -114,8 +121,8 @@ app.get("/nation", function(req, res) {
                     var T = new Twit({
                         consumer_key: TWITTER_CONSUMER_KEY,
                         consumer_secret: TWITTER_CONSUMER_SECRET,
-                        access_token: req.cookies.oauth_token,
-                        access_token_secret: req.cookies.oauth_token_secret,
+                        access_token: req.session.oauth_token,
+                        access_token_secret: req.session.oauth_token_secret,
                         //timeout_ms: 60 * 1000, // optional HTTP request timeout to apply to all requests.
                         strictSSL: true, // optional - requires SSL certificates to be valid.
                     });
@@ -141,8 +148,6 @@ app.get("/nation", function(req, res) {
         .catch((err) => {
             res.render("index", { error: "La città inserita non esiste" });
         });
-
-    
 
 });
 
