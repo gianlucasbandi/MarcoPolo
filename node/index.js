@@ -29,13 +29,11 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 app.use(express.static(__dirname + '/views')); //Usato per caricare i file statici (css)
 app.use(bodyParser.urlencoded({ extended: true }));
-
-
 app.use(cookieParser());
 
 
 /***********ROUTES*************/
-//Pagina iniziale
+//Index page
 app.get("/",(req,res)=>{
     if(req.cookies.logged == undefined){     //User not logged
         res.render("index",{logged:false});
@@ -64,6 +62,7 @@ app.get("/",(req,res)=>{
 });
 
 
+//Twitter OAuth
 app.get("/login",(req,res)=>{
    //1 step: getting request token
    TwitterOAuth.getOAuthRequestToken((error,oauthRequestToken,oauthRequestTokenSecret)=>{
@@ -81,6 +80,7 @@ app.get("/login",(req,res)=>{
 });
 
 
+//SERV 
 app.get('/nation', function(req, res) {
     //Ricavo i dati covid 
     var country = req.originalUrl.split("=")[1];
@@ -127,6 +127,7 @@ app.get('/nation', function(req, res) {
 });
 
 
+//Twitter logout
 app.get("/logout",(req,res)=>{
     res.clearCookie("oauth_token");
     res.clearCookie("oauth_token_secret");
