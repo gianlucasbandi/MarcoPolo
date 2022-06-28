@@ -7,7 +7,7 @@ const qs = require('querystring');                  //To manage URL parsing
 var Twit = require('twit');                         //To use twitter api
 const utils = require("./utils");
 const bodyParser = require('body-parser');
-const { getCovidData, getTweets, getTweetsUrl } = require('./utils');
+const { getCovidData, getTweets, getTweetsUrl, tweet2HTML, getTweetsId } = require('./utils');
 let nodeGeocoder = require('node-geocoder');
 const cc = require('country-state-picker');
 var OAuth = require('oauth');                           //Twitter OAuth
@@ -111,11 +111,9 @@ app.get("/nation", async function(req, res) {
     });
 
     var json_tweets = await getTweets(T,city);      //Searching the tweet posted in that city
-    var tweet_urls = await getTweetsUrl(json_tweets);
-    
-    
-    res.end("CISNAINI");
-    
+    var tweets_id = await getTweetsId(json_tweets);
+    console.log(tweets_id);
+    res.render("home",{city: city, nation: "NONE", covidCases: "NONE",tweets_id: tweets_id});
 
     //https://twitter.com/twitter/status/1541788187512668200
     /*

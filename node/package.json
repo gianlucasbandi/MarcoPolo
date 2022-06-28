@@ -21,6 +21,7 @@
         "oauth": "^0.9.15",
         "pug": "^3.0.2",
         "querystring": "^0.2.1",
+        "react-tweet-embed": "^2.0.0",
         "request": "^2.88.2",
         "twit": "^2.2.11",
         "twitter-api-v2": "^1.12.2"

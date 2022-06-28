@@ -1,4 +1,5 @@
-const { request } = require("chai");
+//const { request } = require("chai");
+const request = require('request');
 
 module.exports = {
     getCovidData: function(json_string) {
@@ -10,21 +11,21 @@ module.exports = {
     //Function to get recent tweets posted in a city
     getTweets: function(T,city){
         return new Promise((resolve,reject)=>{
-            T.get('search/tweets',{q:city,count:5},(err,data,response)=>{
+            T.get('search/tweets',{q:city,count:4},(err,data,response)=>{
                 if(err)reject("Search failed");
                 resolve(data);
             });
         });
     },
 
-    //Getting the urls of each tweets (json format)
-    getTweetsUrl: function(json_tweets){
+    //Getting the ids of each tweets (json format)
+    getTweetsId: function(json_tweets){
         return new Promise((resolve,reject)=>{
             if(json_tweets.statuses.length == 0)reject("No tweets found");
             var res = [];
             for(let i = 0;i<json_tweets.statuses.length;i++){
                 //Pattern : //https://twitter.com/screen_name/status/id Patter da utilizzare
-                res[i] = "https://twitter.com/"+json_tweets.statuses[i].user.screen_name+"/status/"+json_tweets.statuses[i].id_str;
+                res[i] = json_tweets.statuses[i].id_str;
             }
             resolve(res);
         });
