@@ -7,7 +7,7 @@ const qs = require('querystring');                  //To manage URL parsing
 var Twit = require('twit');                         //To use twitter api
 const utils = require("./utils");
 const bodyParser = require('body-parser');
-const { getCovidData } = require('./utils');
+const { getCovidData, getTweets, getTweetsUrl } = require('./utils');
 let nodeGeocoder = require('node-geocoder');
 const cc = require('country-state-picker');
 var OAuth = require('oauth');                           //Twitter OAuth
@@ -95,14 +95,30 @@ app.get("/login",(req,res)=>{
 
 
 //SERV
-app.get("/nation", function(req, res) {
+app.get("/nation", async function(req, res) {
     var city = req.originalUrl.split("=")[1];
     var cases;
     var codNat;
     var nat;
-    var tweets;
-    var tweetsText;
 
+    var T = new Twit({
+        consumer_key: TWITTER_CONSUMER_KEY,
+        consumer_secret: TWITTER_CONSUMER_SECRET,
+        access_token: req.session.oauth_token,
+        access_token_secret: req.session.oauth_token_secret,
+        //timeout_ms: 60 * 1000, // optional HTTP request timeout to apply to all requests.
+        strictSSL: true, // optional - requires SSL certificates to be valid.
+    });
+
+    var json_tweets = await getTweets(T,city);      //Searching the tweet posted in that city
+    var tweet_urls = await getTweetsUrl(json_tweets);
+    
+    
+    res.end("CISNAINI");
+    
+
+    //https://twitter.com/twitter/status/1541788187512668200
+    /*
     geoCoder.geocode(city)
         .then((result) => {
             codNat = result[0].countryCode;
@@ -120,36 +136,31 @@ app.get("/nation", function(req, res) {
                     } else {
                         cases = getCovidData(body);
                     }
-                    var T = new Twit({
-                        consumer_key: TWITTER_CONSUMER_KEY,
-                        consumer_secret: TWITTER_CONSUMER_SECRET,
-                        access_token: req.session.oauth_token,
-                        access_token_secret: req.session.oauth_token_secret,
-                        //timeout_ms: 60 * 1000, // optional HTTP request timeout to apply to all requests.
-                        strictSSL: true, // optional - requires SSL certificates to be valid.
-                    });
 
 
-                    T.get('search/tweets', { q: city, count: 5 }, function(err, data, response) {
+                    T.get('search/tweets', { q: city, count: 6 }, function(err, data, response) {
                         //console.log(data);
                         //res.write(JSON.stringify(data));
 
                         for (let i = 0; i < data.statuses.length; i++) {
-                            tweets += JSON.stringify(data.statuses[i]);
-                            tweetsText += data.statuses[i].text + " ";
+                          //  tweets += JSON.stringify(data.statuses[i]);
+                            tweetsText += data.statuses[i].text + "\n\n\n";
+                            console.log(data.statuses[i].text);
                         }
                         //res.write(tweets);
                         //res.write(tweetsText);
                         //res.end("Ricerca finita");
+                        console.log(tweetsText);
                     });
-                    res.render("home", { city: city, nation: nat.name, covidCases: cases, out: tweetsText });
+                    
+                    res.render("home", { city: city, nation: nat.name, covidCases: cases, tweetsText: tweetsText });
                 }
             });
         })
         .catch((err) => {
             res.render("index", { error: "La città inserita non esiste",logged:req.session.logged,username:req.session.user_name});
         });
-
+        */
 });
 
 
