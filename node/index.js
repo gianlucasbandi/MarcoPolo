@@ -7,7 +7,7 @@ const qs = require('querystring');                  //To manage URL parsing
 var Twit = require('twit');                         //To use twitter api
 const utils = require("./utils");
 const bodyParser = require('body-parser');
-const { getCovidData, getTweets, getTweetsUrl, tweet2HTML, getTweetsId } = require('./utils');
+const { getCovidData, getTweets, getTweetsUrl, tweet2HTML, getTweetsId, getCovidDataItaly } = require('./utils');
 let nodeGeocoder = require('node-geocoder');
 const cc = require('country-state-picker');
 var OAuth = require('oauth');                           //Twitter OAuth
@@ -101,7 +101,12 @@ app.get("/nation", async function(req, res) {
     var cases;
     var codNat;
     var nat;
+    var regionCases;
+    var regionCasesError = false;
 
+    /**********************************/
+    /*Getting recent tweet by geocode*/
+    /**********************************/
     var T = new Twit({
         consumer_key: TWITTER_CONSUMER_KEY,
         consumer_secret: TWITTER_CONSUMER_SECRET,
@@ -135,6 +140,21 @@ app.get("/nation", async function(req, res) {
         tweetError = true;
     });
 
+    /*********************/
+    //Getting covid data:
+    /*********************/
+
+    //Implementare qui ->>>>>
+
+    //Se la città è italiani ricaviamo anche i dati relativi alla regione -->>>>
+
+    await getCovidDataItaly("Lazio") //  <----- Indicare la regione quiii
+    .then(result=> {
+        regionCases = result;
+    })
+    .catch(error =>{
+        regionCasesError = true;
+    });
 
     res.render("home",{city: city, nation: "NONE", covidCases: "NONE",tweets_id: tweets_id,tweetError: tweetError,tweetMsgError:tweetMsgError});
 

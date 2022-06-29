@@ -29,5 +29,24 @@ module.exports = {
             }
             resolve(res);
         });
+    },
+
+    getCovidDataItaly: function(region){
+        return new Promise((resolve,reject)=>{
+            request.get({url:"https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-province-latest.json"},(e,r,body)=>{
+                if(e)reject(e);
+
+                var data_array = new Array();
+                var json_data = JSON.parse(body);
+
+                for(let i = 0;i<json_data.length;i++){
+                    data_array.push(json_data[i]);
+                }
+
+                var data = data_array.find(elem => elem.denominazione_regione == region);
+                //console.log(data);
+                resolve(data.totale_casi);
+            });
+        });
     }
 }
