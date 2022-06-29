@@ -9,21 +9,21 @@ module.exports = {
     },
 
     //Function to get recent tweets posted in a city
-    getTweets: function(T,city){
-        return new Promise((resolve,reject)=>{
-            T.get('search/tweets',{q:city,count:4,result_type:"recent"},(err,data,response)=>{
-                if(err)reject("Search failed");
+    getTweets: function(T, city) {
+        return new Promise((resolve, reject) => {
+            T.get('search/tweets', { q: city, count: 4, result_type: "recent" }, (err, data, response) => {
+                if (err) reject("Search failed");
                 resolve(data);
             });
         });
     },
 
     //Getting the ids of each tweets (json format)
-    getTweetsId: function(json_tweets){
-        return new Promise((resolve,reject)=>{
-            if(json_tweets.statuses.length == 0)reject("No tweets found");
+    getTweetsId: function(json_tweets) {
+        return new Promise((resolve, reject) => {
+            if (json_tweets.statuses.length == 0) reject("No tweets found");
             var res = [];
-            for(let i = 0;i<json_tweets.statuses.length;i++){
+            for (let i = 0; i < json_tweets.statuses.length; i++) {
                 //Pattern : //https://twitter.com/screen_name/status/id Patter da utilizzare
                 res[i] = json_tweets.statuses[i].id_str;
             }
@@ -31,15 +31,15 @@ module.exports = {
         });
     },
 
-    getCovidDataItaly: function(region){
-        return new Promise((resolve,reject)=>{
-            request.get({url:"https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-province-latest.json"},(e,r,body)=>{
-                if(e)reject(e);
+    getCovidDataItaly: function(region) {
+        return new Promise((resolve, reject) => {
+            request.get({ url: "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-province-latest.json" }, (e, r, body) => {
+                if (e) reject(e);
 
                 var data_array = new Array();
                 var json_data = JSON.parse(body);
 
-                for(let i = 0;i<json_data.length;i++){
+                for (let i = 0; i < json_data.length; i++) {
                     data_array.push(json_data[i]);
                 }
 
