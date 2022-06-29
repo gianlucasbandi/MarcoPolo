@@ -5,6 +5,8 @@ html
     link(rel='icon' href='pic/mp.ico' type='image/icon type')
     link(rel='stylesheet', href='/css/index.css')
     script(src='https://kit.fontawesome.com/d8697e016e.js' crossorigin='anonymous')
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js")
+    script(src='/js/chatbot.js')
     meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
     title MarcoPolo
   body
@@ -31,5 +33,12 @@ html
           else 
             a(class="logbtn", href="https://localhost:8083/login") Accedi con Twitter!              
               i.fa-brands.fa-twitter
-          p ChatBot 
+
+          .chatbot 
+            .chat 
+              ul 
+
+              form(class="send-form")
+                input(type="text" placeholder="..." id="inputMsg")
+                input(type="submit" class="send-btn" id="inputSubmit")
           

@@ -16,6 +16,7 @@
         "dotenv": "^16.0.1",
         "express": "^4.17.3",
         "express-session": "^1.17.3",
+        "express-ws": "^5.0.2",
         "mocha": "^10.0.0",
         "node-geocoder": "^4.1.0",
         "oauth": "^0.9.15",
@@ -24,6 +25,8 @@
         "react-tweet-embed": "^2.0.0",
         "request": "^2.88.2",
         "twit": "^2.2.11",
-        "twitter-api-v2": "^1.12.2"
+        "twitter-api-v2": "^1.12.2",
+        "websocket": "^1.0.34",
+        "ws": "^8.8.0"
     }
 }

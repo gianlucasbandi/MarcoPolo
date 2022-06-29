@@ -15,8 +15,12 @@ var session = require('express-session');
 const { response } = require('express');
 
 
+
 const PORT = 3000;
 const app = express();
+
+var expressWs = require('express-ws')(app);
+
 const { TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_CALL_BACK_URL } = process.env; //Rivavo le credenziali Twitter
 var TwitterOAuth = new OAuth.OAuth(
     'https://api.twitter.com/oauth/request_token',
@@ -157,51 +161,6 @@ app.get("/nation", async function(req, res) {
     });
 
     res.render("home",{city: city, nation: "NONE", covidCases: "NONE",tweets_id: tweets_id,tweetError: tweetError,tweetMsgError:tweetMsgError});
-
-    //https://twitter.com/twitter/status/1541788187512668200
-    /*
-    geoCoder.geocode(city)
-        .then((result) => {
-            codNat = result[0].countryCode;
-            request({
-                url: 'https://corona.lmao.ninja/v2/countries/' + codNat + '?strict',
-                method: 'GET',
-            }, function(error, response, body) {
-                if (error) {
-                    res.end(error);
-                } else {
-                    nat = cc.getCountry(codNat);
-                    console.log(response);
-                    if (body.split(":")[0].includes("message") == true) {
-                        cases = 'ko';
-                    } else {
-                        cases = getCovidData(body);
-                    }
-
-
-                    T.get('search/tweets', { q: city, count: 6 }, function(err, data, response) {
-                        //console.log(data);
-                        //res.write(JSON.stringify(data));
-
-                        for (let i = 0; i < data.statuses.length; i++) {
-                          //  tweets += JSON.stringify(data.statuses[i]);
-                            tweetsText += data.statuses[i].text + "\n\n\n";
-                            console.log(data.statuses[i].text);
-                        }
-                        //res.write(tweets);
-                        //res.write(tweetsText);
-                        //res.end("Ricerca finita");
-                        console.log(tweetsText);
-                    });
-                    
-                    res.render("home", { city: city, nation: nat.name, covidCases: cases, tweetsText: tweetsText });
-                }
-            });
-        })
-        .catch((err) => {
-            res.render("index", { error: "La città inserita non esiste",logged:req.session.logged,username:req.session.user_name});
-        });
-        */
 });
 
 
@@ -209,6 +168,17 @@ app.get("/nation", async function(req, res) {
 app.get("/logout",(req,res)=>{
     req.session.destroy();
     res.render("index", { logged: false });
+});
+
+
+/*********************/
+/******CHAT BOT*******/
+/*********************/
+app.ws('/chatbot', function(ws, req) {
+    ws.on('message', function(msg) {
+      console.log(msg);
+    });
+    console.log("Ricevuta connessione ws");
 });
 
 
