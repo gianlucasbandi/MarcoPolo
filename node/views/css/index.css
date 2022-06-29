@@ -102,3 +102,22 @@ input[type='submit']:hover {
 .outbtn:visited {
     color: rgb(29, 161, 242);
 }
+
+/* CHATBOT */
+
+.chat{
+    width: 100%;
+    background-color: aliceblue;
+    overflow-y:scroll;
+    height: 400px;
+}
+
+ul{
+    text-decoration: none;
+    list-style: none;
+}
+
+li{
+    text-decoration: none;
+    list-style: none;
+}

@@ -176,9 +176,18 @@ app.get("/logout",(req,res)=>{
 /*********************/
 app.ws('/chatbot', function(ws, req) {
     ws.on('message', function(msg) {
-      console.log(msg);
+        switch(msg.toLowerCase()){
+            case "help":
+                ws.send("Queste sono le cose che puoi chiedermi:<br><br> -Cisanini <br><br>-Cisanini2 <br><br>-Cisanini3")
+                break
+            default:
+                ws.send("Comando non riconosciuto :(");
+        }
     });
-    console.log("Ricevuta connessione ws");
+    
+
+    //console.log("Ricevuta connessione ws");
+    ws.send("Benvenuto sull'assistenza di MarcoPolo.<br><br>Usare help per una breve guida ai comandi");
 });
 
 
