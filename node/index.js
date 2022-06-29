@@ -148,29 +148,30 @@ app.get("/nation", async function(req, res) {
 
     await geoCoder.geocode(city)
         .then((result) => {
-            var out = (result[0].formattedAddress).split(",");
             codNat = result[0].countryCode;
-            nat = out[3];
-            reg = out[2];
+            nat = result[0].country;
+
+            if (nat == 'Italia') {
+                reg = result[0].formattedAddress.split(",")[2];
+            } else {
+                reg = "none";
+            }
         })
         .catch((err) => {
             res.render("index", { error: "La città inserita non esiste" });
         });
 
-    await request({
-        url: 'https://corona-api.com/countries/' + codNat,
-        method: 'GET',
-    }, function(error, response, body) {
-        if (error) {
-            res.end(error);
-        } else {
-            cases = body.split("{")[7].split(",")[5].split(":")[1];
-        }
-    });
+    await getCovidData(codNat)
+        .then(result => {
+            cases = result;
+        })
+        .catch(error => {
+            cases = "ND";
+        })
 
     //Se la città è italiani ricaviamo anche i dati relativi alla regione -->>>>
 
-    await getCovidDataItaly(reg) //  <----- Indicare la regione quiii (fatto :) )
+    await getCovidDataItaly('Lazio') //  <----- Indicare la regione quiii (fatto :))
         .then(result => {
             regionCases = result;
         })

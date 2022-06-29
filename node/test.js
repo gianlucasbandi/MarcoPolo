@@ -1,7 +1,8 @@
 const request = require('request');
+var codNat = 'IT';
 
 request({
-    url: 'https://corona-api.com/countries/IT',
+    url: 'https://corona-api.com/countries/' + codNat,
     method: 'GET',
 }, function(error, response, body) {
     if (error) {

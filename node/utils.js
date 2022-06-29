@@ -2,10 +2,16 @@
 const request = require('request');
 
 module.exports = {
-    getCovidData: function(json_string) {
-        var spl = json_string.split(",");
-        var elem = spl.find(el => el.includes("todayCases"));
-        return elem.split(":")[1];
+    getCovidData: function(codNat) {
+        return new Promise((resolve, reject) => {
+            request.get({ url: "https://corona-api.com/countries/" + codNat }, (error, response, body) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(body.split("{")[7].split(",")[5].split(":")[1]);
+                }
+            });
+        });
     },
 
     //Function to get recent tweets posted in a city
