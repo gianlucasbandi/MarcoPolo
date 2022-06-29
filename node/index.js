@@ -170,7 +170,7 @@ app.get("/nation", async function(req, res) {
 
     //Se la città è italiani ricaviamo anche i dati relativi alla regione -->>>>
 
-    await getCovidDataItaly("Lazio") //  <----- Indicare la regione quiii
+    await getCovidDataItaly(reg) //  <----- Indicare la regione quiii
         .then(result => {
             regionCases = result;
         })
