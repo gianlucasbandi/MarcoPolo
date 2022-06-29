@@ -11,7 +11,7 @@ module.exports = {
     //Function to get recent tweets posted in a city
     getTweets: function(T,city){
         return new Promise((resolve,reject)=>{
-            T.get('search/tweets',{q:city,count:4},(err,data,response)=>{
+            T.get('search/tweets',{q:city,count:4,result_type:"recent"},(err,data,response)=>{
                 if(err)reject("Search failed");
                 resolve(data);
             });

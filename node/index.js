@@ -12,6 +12,7 @@ let nodeGeocoder = require('node-geocoder');
 const cc = require('country-state-picker');
 var OAuth = require('oauth');                           //Twitter OAuth
 var session = require('express-session');
+const { response } = require('express');
 
 
 const PORT = 3000;
@@ -110,10 +111,32 @@ app.get("/nation", async function(req, res) {
         strictSSL: true, // optional - requires SSL certificates to be valid.
     });
 
-    var json_tweets = await getTweets(T,city);      //Searching the tweet posted in that city
-    var tweets_id = await getTweetsId(json_tweets);
-    console.log(tweets_id);
-    res.render("home",{city: city, nation: "NONE", covidCases: "NONE",tweets_id: tweets_id});
+    var tweetError = false;         //true= error occurred
+    var tweetMsgError;              
+    var json_tweets;                //Recent tweet in that city
+    var tweets_id;                  
+
+    //Searching the tweet posted in that city
+    await getTweets(T,city)
+    .then(response=>{
+        json_tweets = response;
+    }).catch(error=>{
+        tweetMsgError = error;
+        tweetError = true;
+    });
+
+    //Getting tweet id 
+    await getTweetsId(json_tweets)
+    .then(response=>{
+        tweets_id = response;
+    })
+    .catch(error=>{
+        tweetMsgError = error;
+        tweetError = true;
+    });
+
+
+    res.render("home",{city: city, nation: "NONE", covidCases: "NONE",tweets_id: tweets_id,tweetError: tweetError,tweetMsgError:tweetMsgError});
 
     //https://twitter.com/twitter/status/1541788187512668200
     /*

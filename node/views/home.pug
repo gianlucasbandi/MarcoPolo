@@ -16,9 +16,12 @@ html
     #main
         #data
             .tweets
-                each val in ids 
-                    blockquote(class = "twitter-tweet")
-                        a(href="https://twitter.com/x/status/"+val)             
+                if !tweetError
+                    each val in ids 
+                        blockquote(class = "twitter-tweet")
+                            a(href="https://twitter.com/x/status/"+val)
+                else 
+                    p= tweetMsgError           
 
             .covid
                 .city
