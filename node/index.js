@@ -157,6 +157,17 @@ app.get("/nation", async function(req, res) {
             res.render("index", { error: "La città inserita non esiste" });
         });
 
+    await request({
+        url: 'https://corona-api.com/countries/' + codNat,
+        method: 'GET',
+    }, function(error, response, body) {
+        if (error) {
+            res.end(error);
+        } else {
+            cases = body.split("{")[7].split(",")[5].split(":")[1];
+        }
+    });
+
     //Se la città è italiani ricaviamo anche i dati relativi alla regione -->>>>
 
     await getCovidDataItaly("Lazio") //  <----- Indicare la regione quiii
@@ -167,7 +178,7 @@ app.get("/nation", async function(req, res) {
             regionCasesError = true;
         });
 
-    res.render("home", { city: city, nation: nat, covidCases: "NONE", tweets_id: tweets_id, tweetError: tweetError, tweetMsgError: tweetMsgError });
+    res.render("home", { city: city, nation: nat, covidCases: cases, tweets_id: tweets_id, tweetError: tweetError, tweetMsgError: tweetMsgError });
 });
 
 

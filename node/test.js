@@ -1,21 +1,12 @@
-const cc = require('country-state-picker');
-let nodeGeocoder = require('node-geocoder');
+const request = require('request');
 
-let options = {
-    provider: 'openstreetmap',
-};
-
-
-let geoCoder = nodeGeocoder(options);
-
-geoCoder.geocode('roma')
-    .then((result) => {
-        var out = (result[0].formattedAddress + "," + result[0].countryCode).split(",");
-        var codNat = out[4];
-        var nat = out[3];
-        var reg = out[2];
-        console.log(codNat, nat, reg);
-    })
-    .catch((err) => {
-        res.render("index", { error: "La città inserita non esiste" });
-    });
+request({
+    url: 'https://corona-api.com/countries/IT',
+    method: 'GET',
+}, function(error, response, body) {
+    if (error) {
+        res.end(error);
+    } else {
+        console.log(body.split("{")[7].split(",")[5].split(":")[1]);
+    }
+});
