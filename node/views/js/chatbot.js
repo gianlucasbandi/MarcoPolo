@@ -1,11 +1,10 @@
-$(document).ready(function (){
+$(document).ready(function() {
     var $chatbotUL = $("#chatbotUL");
-    var $sendBtn =  $("#inputSubmit");
+    var $sendBtn = $("#inputSubmit");
     var $inputMsg = $("#inputMsg");
     var $chat = $(".chat");
 
     const ws = new WebSocket('wss://localhost:8083/chatbot');
-
 
     //Node send message via ws
     ws.addEventListener("message",function(event){
@@ -16,11 +15,11 @@ $(document).ready(function (){
 
 
     //Client send message via ws
-    $sendBtn.on("click",function(e){
+    $sendBtn.on("click", function(e) {
         e.preventDefault();
-        
+
         var msg = $inputMsg.val();
-        if(msg != ""){
+        if (msg != "") {
             ws.send(msg);
             var $newItem = $("<li class='usr-msg'><p>"+msg+"</p></li>");
             $chatbotUL.append($newItem);

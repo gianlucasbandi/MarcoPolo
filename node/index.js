@@ -94,6 +94,7 @@ app.get("/nation", async function(req, res) {
     var regionCases;
     var regionCasesError = false;
     var isThereRegion = false;
+    var cityErr = false;
 
     /**********************************/
     /*Getting recent tweet by geocode*/
@@ -142,30 +143,33 @@ app.get("/nation", async function(req, res) {
             reg = result[2];
         })
         .catch(err => {
-            res.render("index", { error: err });
+            cityErr = true;
         })
 
-
-    await getCovidData(codNat)
-        .then(result => {
-            cases = result;
-        })
-        .catch(error => {
-            cases = "ND";
-        })
-
-    //Se la città è italiana ricaviamo anche i dati relativi alla regione -->>>>
-    if (nat == 'Italia') {
-        await getCovidDataItaly(reg) //  <----- Indicare la regione quiii (fatto :))
+    if (cityErr) {
+        res.render("index", { logged: true, username: req.session.user_name, error: "La città inserita non esiste" });
+    } else {
+        await getCovidData(codNat)
             .then(result => {
-                regionCases = result;
-                isThereRegion = true;
+                cases = result;
             })
             .catch(error => {
-                regionCasesError = true;
-            });
+                cases = "ND";
+            })
+
+        //Se la città è italiana ricaviamo anche i dati relativi alla regione -->>>>
+        if (nat == 'Italia') {
+            await getCovidDataItaly(reg) //  <----- Indicare la regione quiii (fatto :))
+                .then(result => {
+                    regionCases = result;
+                    isThereRegion = true;
+                })
+                .catch(error => {
+                    regionCasesError = true;
+                });
+        }
+        res.render("home", { city: city, nation: nat, covidCases: cases, tweets_id: tweets_id, tweetError: tweetError, tweetMsgError: tweetMsgError, regione: reg, regCas: regionCases, regErr: regionCasesError, isReg: isThereRegion });
     }
-    res.render("home", { city: city, nation: nat, covidCases: cases, tweets_id: tweets_id, tweetError: tweetError, tweetMsgError: tweetMsgError, regione: reg, regCas: regionCases, regErr: regionCasesError, isReg: isThereRegion });
 });
 
 

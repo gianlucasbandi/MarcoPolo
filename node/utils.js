@@ -7,6 +7,12 @@ let options = {
 
 let geoCoder = nodeGeocoder(options);
 
+function isNumeric(str) {
+    return /\d/.test(str);
+}
+
+var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+
 module.exports = {
     getCovidData: function(codNat) {
         return new Promise((resolve, reject) => {
@@ -55,7 +61,7 @@ module.exports = {
                     data_array.push(json_data[i]);
                 }
 
-                console.log(region);
+                //console.log(region);
                 var data = data_array.find(elem => elem.denominazione_regione == region.trim());
                 //console.log(data);
                 resolve(data.totale_casi);
@@ -65,19 +71,22 @@ module.exports = {
 
     getGeoData: function(city) {
         return new Promise((resolve, reject) => {
-            geoCoder.geocode(city)
-                .then((result) => {
-                    if (result[0].country == 'Italia') {
-                        var reg = result[0].state;
-                    } else {
-                        var reg = "none";
-                    }
-                    var out = [result[0].countryCode, result[0].country, reg];
-                    resolve(out);
-                })
-                .catch((err) => {
-                    reject("La città inserita non esiste");
-                });
+            if (isNumeric(city) || format.test(city)) reject("La città inserita non esiste");
+            else {
+                geoCoder.geocode(city)
+                    .then((result) => {
+                        if (result[0].country == 'Italia') {
+                            var reg = result[0].state;
+                        } else {
+                            var reg = "none";
+                        }
+                        var out = [result[0].countryCode, result[0].country, reg];
+                        resolve(out);
+                    })
+                    .catch((err) => {
+                        reject("La città inserita non esiste");
+                    });
+            }
         })
     }
 }
