@@ -11,6 +11,7 @@ const { getCovidData, getTweets, getTweetsUrl, tweet2HTML, getTweetsId, getCovid
 var OAuth = require('oauth'); //Twitter OAuth
 var session = require('express-session');
 const { response } = require('express');
+const { basename } = require('path');
 
 
 const PORT = 3000;
@@ -165,7 +166,7 @@ app.get("/nation", async function(req, res) {
 
             //Se la città è italiana ricaviamo anche i dati relativi alla regione -->>>>
             if (nat == 'Italia') {
-                await getCovidDataItaly(reg) //  <----- Indicare la regione quiii (fatto :))
+                await getCovidDataItaly(reg) 
                     .then(result => {
                         regionCases = result;
                         isThereRegion = true;
@@ -206,6 +207,62 @@ app.ws('/chatbot', function(ws, req) {
     ws.send("Benvenuto sull'assistenza di MarcoPolo.<br>Usare help per una breve guida ai comandi");
 });
 
+
+/****************************************/
+/**********REST API*********************/
+/****************************************/
+app.get("/covidData/:city",async function(req,res){
+    var city = req.params.city;
+    var nat;
+    var codNat;
+    var cases;
+    var reg;
+    var cityErr;
+    var regionCases;
+    var isThereRegion;
+
+    await getGeoData(city)
+            .then(result => {
+                codNat = result[0];
+                nat = result[1];
+                reg = result[2];
+            })
+            .catch(err => {
+                cityErr = true;
+            });
+    
+    await getCovidData(codNat)
+    .then(result => {
+        cases = result;
+    })
+    .catch(error => {
+        cases = "ND";
+    });
+
+
+    if (nat == 'Italia') {
+        await getCovidDataItaly(reg) 
+            .then(result => {
+                regionCases = result;
+                isThereRegion = true;
+            })
+            .catch(error => {
+                regionCasesError = true;
+            });
+    }
+
+    var result = {
+        "nation":nat,
+        "codNat":codNat,
+        "cases":cases,
+        "region":reg,
+        "regionCases":regionCases,
+        "isItalian":isThereRegion
+    }
+
+    res.json(result);
+
+});
 
 app.listen(PORT, () => {
     console.log("Applicazione in ascolto sulla porta " + PORT);

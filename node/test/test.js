@@ -14,3 +14,16 @@ describe("test that verify if the web app is on",function(){
         });
     });
 });
+
+
+//Test API: get covidData/:city
+describe("test that verify if the covidData API works",function(){
+    it("should return a json file unempty",function(done){
+        chai.request("https://localhost:8083").get("/covidData/Roma").end(function(err,res){
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            expect(res.body.cases).to.not.be.undefined;
+            done();
+        });
+    });
+});
