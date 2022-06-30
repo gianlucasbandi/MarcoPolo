@@ -1,13 +1,14 @@
-const request = require('request');
-var codNat = 'IT';
+let nodeGeocoder = require('node-geocoder');
+let options = {
+    provider: 'openstreetmap',
+};
 
-request({
-    url: 'https://corona-api.com/countries/' + codNat,
-    method: 'GET',
-}, function(error, response, body) {
-    if (error) {
-        res.end(error);
-    } else {
-        console.log(body.split("{")[7].split(",")[5].split(":")[1]);
-    }
-});
+let geoCoder = nodeGeocoder(options);
+
+geoCoder.geocode('Roma')
+    .then((result) => {
+        console.log(result)
+    })
+    .catch((err) => {
+        console.log("La città inserita non esiste");
+    });

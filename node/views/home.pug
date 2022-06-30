@@ -33,6 +33,12 @@ html
                 .stats
                   h1 Casi:
                   h1= covidCases
+                if isReg
+                  h1 Regione
+                  h1= regione
+                  h1 Casi regionali:
+                  h1= regCas
+                  
         #maps
             h1 Qui ci va la mappa
             

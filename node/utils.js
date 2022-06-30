@@ -1,5 +1,11 @@
 //const { request } = require("chai");
 const request = require('request');
+let nodeGeocoder = require('node-geocoder');
+let options = {
+    provider: 'openstreetmap',
+};
+
+let geoCoder = nodeGeocoder(options);
 
 module.exports = {
     getCovidData: function(codNat) {
@@ -49,10 +55,29 @@ module.exports = {
                     data_array.push(json_data[i]);
                 }
 
-                var data = data_array.find(elem => elem.denominazione_regione == region);
+                console.log(region);
+                var data = data_array.find(elem => elem.denominazione_regione == region.trim());
                 //console.log(data);
                 resolve(data.totale_casi);
             });
         });
+    },
+
+    getGeoData: function(city) {
+        return new Promise((resolve, reject) => {
+            geoCoder.geocode(city)
+                .then((result) => {
+                    if (result[0].country == 'Italia') {
+                        var reg = result[0].state;
+                    } else {
+                        var reg = "none";
+                    }
+                    var out = [result[0].countryCode, result[0].country, reg];
+                    resolve(out);
+                })
+                .catch((err) => {
+                    reject("La città inserita non esiste");
+                });
+        })
     }
 }

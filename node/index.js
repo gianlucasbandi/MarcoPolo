@@ -7,13 +7,10 @@ const qs = require('querystring'); //To manage URL parsing
 var Twit = require('twit'); //To use twitter api
 const utils = require("./utils");
 const bodyParser = require('body-parser');
-const { getCovidData, getTweets, getTweetsUrl, tweet2HTML, getTweetsId, getCovidDataItaly } = require('./utils');
-let nodeGeocoder = require('node-geocoder');
-const cc = require('country-state-picker');
+const { getCovidData, getTweets, getTweetsUrl, tweet2HTML, getTweetsId, getCovidDataItaly, getGeoData } = require('./utils');
 var OAuth = require('oauth'); //Twitter OAuth
 var session = require('express-session');
 const { response } = require('express');
-
 
 
 const PORT = 3000;
@@ -31,15 +28,6 @@ var TwitterOAuth = new OAuth.OAuth(
     TWITTER_CALL_BACK_URL,
     'HMAC-SHA1'
 );
-
-
-let options = {
-    provider: 'openstreetmap',
-};
-
-
-let geoCoder = nodeGeocoder(options);
-
 
 //Getting static file and pug's views
 app.set("views", path.join(__dirname, "views"));
@@ -105,6 +93,7 @@ app.get("/nation", async function(req, res) {
     var reg;
     var regionCases;
     var regionCasesError = false;
+    var isThereRegion = false;
 
     /**********************************/
     /*Getting recent tweet by geocode*/
@@ -146,20 +135,16 @@ app.get("/nation", async function(req, res) {
     //Getting covid data:
     /*********************/
 
-    await geoCoder.geocode(city)
-        .then((result) => {
-            codNat = result[0].countryCode;
-            nat = result[0].country;
-
-            if (nat == 'Italia') {
-                reg = result[0].formattedAddress.split(",")[2];
-            } else {
-                reg = "none";
-            }
+    await getGeoData(city)
+        .then(result => {
+            codNat = result[0];
+            nat = result[1];
+            reg = result[2];
         })
-        .catch((err) => {
-            res.render("index", { error: "La città inserita non esiste" });
-        });
+        .catch(err => {
+            res.render("index", { error: err });
+        })
+
 
     await getCovidData(codNat)
         .then(result => {
@@ -169,17 +154,18 @@ app.get("/nation", async function(req, res) {
             cases = "ND";
         })
 
-    //Se la città è italiani ricaviamo anche i dati relativi alla regione -->>>>
-
-    await getCovidDataItaly('Lazio') //  <----- Indicare la regione quiii (fatto :))
-        .then(result => {
-            regionCases = result;
-        })
-        .catch(error => {
-            regionCasesError = true;
-        });
-
-    res.render("home", { city: city, nation: nat, covidCases: cases, tweets_id: tweets_id, tweetError: tweetError, tweetMsgError: tweetMsgError });
+    //Se la città è italiana ricaviamo anche i dati relativi alla regione -->>>>
+    if (nat == 'Italia') {
+        await getCovidDataItaly(reg) //  <----- Indicare la regione quiii (fatto :))
+            .then(result => {
+                regionCases = result;
+                isThereRegion = true;
+            })
+            .catch(error => {
+                regionCasesError = true;
+            });
+    }
+    res.render("home", { city: city, nation: nat, covidCases: cases, tweets_id: tweets_id, tweetError: tweetError, tweetMsgError: tweetMsgError, regione: reg, regCas: regionCases, regErr: regionCasesError, isReg: isThereRegion });
 });
 
 
