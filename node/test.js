@@ -1,14 +1,4 @@
-let nodeGeocoder = require('node-geocoder');
-let options = {
-    provider: 'openstreetmap',
-};
+var str = "abaco"
+var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
 
-let geoCoder = nodeGeocoder(options);
-
-geoCoder.geocode('Roma')
-    .then((result) => {
-        console.log(result)
-    })
-    .catch((err) => {
-        console.log("La città inserita non esiste");
-    });
+console.log(format.test(str));

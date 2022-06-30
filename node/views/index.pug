@@ -21,7 +21,7 @@ html
         #search 
           if logged 
             form(action="https://localhost:8083/nation" method = "GET")
-              input(type="text", placeholder="Inserisci una città", name="nat", autocomplete="off" required)
+              input(type="text", placeholder="Inserisci una città", name="nat", id="prova", autocomplete="off" required)
               p= error 
               input(type="submit", value="Cerca!")
         #utils
