@@ -14,34 +14,35 @@ html
     title MarcoPolo
   body
     #main
-        #data
-            .tweets
-                if !tweetError
-                    each val in ids 
-                        blockquote(class = "twitter-tweet")
-                            a(href="https://twitter.com/x/status/"+val)
-                else 
-                    p= tweetMsgError           
+      .tweets
+          if !tweetError
+              each val in ids 
+                  blockquote(class = "twitter-tweet")
+                      a(href="https://twitter.com/x/status/"+val)
+          else 
+              p= tweetMsgError       
 
-            .covid
-                .city
-                  h1 Città:
-                  h1= city
-                .nation
-                  h1 Nazione:
-                  h1= nation
-                .stats
-                  h1 Casi:
-                  h1= covidCases
-                if isReg
-                  h1 Regione
-                  h1= regione
-                  h1 Casi regionali:
-                  h1= regCas
-                  
-        #maps
-            h1 Qui ci va la mappa
-            
-    #back
-      a(class="back-btn", href="https://localhost:8083") Fai un'altra ricerca! 
-        i.fas.fa-redo
+      #maps
+        h1 Qui ci va la mappa
+
+      .covid
+          .city
+            p(class="title") Città:
+            p= city
+          .nation
+            p(class="title") Nazione:
+            p= nation
+          .stats
+            p(class="title") Casi:
+            p= covidCases
+          if isReg
+            .regionName
+              p(class="title") Regione:
+              p= regione
+            .regionCases
+              p(class="title") Casi regionali:
+              p= regCas
+                    
+      #back
+        a(class="back-btn", href="https://localhost:8083") Fai un'altra ricerca! 
+          i.fas.fa-redo

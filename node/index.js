@@ -86,89 +86,96 @@ app.get("/login", (req, res) => {
 
 //SERV
 app.get("/nation", async function(req, res) {
-    var city = req.originalUrl.split("=")[1];
-    var cases;
-    var codNat;
-    var nat;
-    var reg;
-    var regionCases;
-    var regionCasesError = false;
-    var isThereRegion = false;
-    var cityErr = false;
 
-    /**********************************/
-    /*Getting recent tweet by geocode*/
-    /**********************************/
-    var T = new Twit({
-        consumer_key: TWITTER_CONSUMER_KEY,
-        consumer_secret: TWITTER_CONSUMER_SECRET,
-        access_token: req.session.oauth_token,
-        access_token_secret: req.session.oauth_token_secret,
-        //timeout_ms: 60 * 1000, // optional HTTP request timeout to apply to all requests.
-        strictSSL: true, // optional - requires SSL certificates to be valid.
-    });
+    if(req.session.logged == undefined){        //User not logged
+        res.render("index", { logged: false });
+    }
 
-    var tweetError = false; //true= error occurred
-    var tweetMsgError;
-    var json_tweets; //Recent tweet in that city
-    var tweets_id;
+    else{
+        var city = req.originalUrl.split("=")[1];
+        var cases;
+        var codNat;
+        var nat;
+        var reg;
+        var regionCases;
+        var regionCasesError = false;
+        var isThereRegion = false;
+        var cityErr = false;
 
-    //Searching the tweet posted in that city
-    await getTweets(T, city)
-        .then(response => {
-            json_tweets = response;
-        }).catch(error => {
-            tweetMsgError = error;
-            tweetError = true;
+        /**********************************/
+        /*Getting recent tweet by geocode*/
+        /**********************************/
+        var T = new Twit({
+            consumer_key: TWITTER_CONSUMER_KEY,
+            consumer_secret: TWITTER_CONSUMER_SECRET,
+            access_token: req.session.oauth_token,
+            access_token_secret: req.session.oauth_token_secret,
+            //timeout_ms: 60 * 1000, // optional HTTP request timeout to apply to all requests.
+            strictSSL: true, // optional - requires SSL certificates to be valid.
         });
 
-    //Getting tweet id 
-    await getTweetsId(json_tweets)
-        .then(response => {
-            tweets_id = response;
-        })
-        .catch(error => {
-            tweetMsgError = error;
-            tweetError = true;
-        });
+        var tweetError = false; //true= error occurred
+        var tweetMsgError;
+        var json_tweets; //Recent tweet in that city
+        var tweets_id;
 
-    /*********************/
-    //Getting covid data:
-    /*********************/
+        //Searching the tweet posted in that city
+        await getTweets(T, city)
+            .then(response => {
+                json_tweets = response;
+            }).catch(error => {
+                tweetMsgError = error;
+                tweetError = true;
+            });
 
-    await getGeoData(city)
-        .then(result => {
-            codNat = result[0];
-            nat = result[1];
-            reg = result[2];
-        })
-        .catch(err => {
-            cityErr = true;
-        })
-
-    if (cityErr) {
-        res.render("index", { logged: true, username: req.session.user_name, error: "La città inserita non esiste" });
-    } else {
-        await getCovidData(codNat)
-            .then(result => {
-                cases = result;
+        //Getting tweet id 
+        await getTweetsId(json_tweets)
+            .then(response => {
+                tweets_id = response;
             })
             .catch(error => {
-                cases = "ND";
+                tweetMsgError = error;
+                tweetError = true;
+            });
+
+        /*********************/
+        //Getting covid data:
+        /*********************/
+
+        await getGeoData(city)
+            .then(result => {
+                codNat = result[0];
+                nat = result[1];
+                reg = result[2];
+            })
+            .catch(err => {
+                cityErr = true;
             })
 
-        //Se la città è italiana ricaviamo anche i dati relativi alla regione -->>>>
-        if (nat == 'Italia') {
-            await getCovidDataItaly(reg) //  <----- Indicare la regione quiii (fatto :))
+        if (cityErr) {
+            res.render("index", { logged: true, username: req.session.user_name, error: "La città inserita non esiste" });
+        } else {
+            await getCovidData(codNat)
                 .then(result => {
-                    regionCases = result;
-                    isThereRegion = true;
+                    cases = result;
                 })
                 .catch(error => {
-                    regionCasesError = true;
-                });
+                    cases = "ND";
+                })
+
+            //Se la città è italiana ricaviamo anche i dati relativi alla regione -->>>>
+            if (nat == 'Italia') {
+                await getCovidDataItaly(reg) //  <----- Indicare la regione quiii (fatto :))
+                    .then(result => {
+                        regionCases = result;
+                        isThereRegion = true;
+                    })
+                    .catch(error => {
+                        regionCasesError = true;
+                    });
+            }
+            res.render("home", { city: city, nation: nat, covidCases: cases, tweets_id: tweets_id, tweetError: tweetError, tweetMsgError: tweetMsgError, regione: reg, regCas: regionCases, regErr: regionCasesError, isReg: isThereRegion });
         }
-        res.render("home", { city: city, nation: nat, covidCases: cases, tweets_id: tweets_id, tweetError: tweetError, tweetMsgError: tweetMsgError, regione: reg, regCas: regionCases, regErr: regionCasesError, isReg: isThereRegion });
     }
 });
 
@@ -187,7 +194,7 @@ app.ws('/chatbot', function(ws, req) {
     ws.on('message', function(msg) {
         switch (msg.toLowerCase()) {
             case "help":
-                ws.send("Queste sono le cose che puoi chiedermi:<br><br> -Cisanini <br><br>-Cisanini2 <br><br>-Cisanini3")
+                ws.send("Queste sono le cose che puoi chiedermi:<br> -Cisanini <br>-Cisanini2 <br>-Cisanini3")
                 break
             default:
                 ws.send("Comando non riconosciuto :(");
@@ -196,7 +203,7 @@ app.ws('/chatbot', function(ws, req) {
 
 
     //console.log("Ricevuta connessione ws");
-    ws.send("Benvenuto sull'assistenza di MarcoPolo.<br><br>Usare help per una breve guida ai comandi");
+    ws.send("Benvenuto sull'assistenza di MarcoPolo.<br>Usare help per una breve guida ai comandi");
 });
 
 
