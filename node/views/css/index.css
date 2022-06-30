@@ -106,18 +106,35 @@ input[type='submit']:hover {
 /* CHATBOT */
 
 .chat{
-    width: 100%;
+    margin-top: 2em;
+    width: 750px;
     background-color: aliceblue;
     overflow-y:scroll;
-    height: 400px;
+    height: 280px;
 }
 
 ul{
     text-decoration: none;
     list-style: none;
+    display: flex;
+    flex-direction: column;
 }
 
 li{
     text-decoration: none;
     list-style: none;
+    width: fit-content;
+    margin-right: 10px;
+    margin-left: 10px;
+    border-radius: 25%;
+    padding: 2%
+}
+
+.bot-msg{
+    background-color: #1da1f2;
+}
+
+.usr-msg{
+    align-self: end;
+    background-color: #e1e8ed;
 }
