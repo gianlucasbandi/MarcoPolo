@@ -222,7 +222,7 @@ app.ws('/chatbot', function(ws, req) {
 /****************************************/
 
 /**
- * @api {get} /covidData/:city Richede dati covid
+ * @api {get} /covidData/:city Richedere dati covid
  * @apiName covidData
  * @apiGroup User
  *
