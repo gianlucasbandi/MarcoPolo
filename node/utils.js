@@ -52,7 +52,7 @@ module.exports = {
 
     getCovidDataItaly: function(region) {
         return new Promise((resolve, reject) => {
-            request.get({ url: "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-province-latest.json" }, (e, r, body) => {
+            request.get({ url: "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni-latest.json" }, (e, r, body) => {
                 if (e) reject(e);
 
                 var data_array = new Array();
@@ -65,7 +65,7 @@ module.exports = {
                 //console.log(region);
                 var data = data_array.find(elem => elem.denominazione_regione == region.trim());
                 //console.log(data);
-                resolve(data.totale_casi);
+                resolve(data.nuovi_positivi);
             });
         });
     },

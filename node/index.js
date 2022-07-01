@@ -224,7 +224,7 @@ app.ws('/chatbot', function(ws, req) {
 /**
  * @api {get} /covidData/:city Richedere dati covid
  * @apiName covidData
- * @apiGroup User
+ * @apiGroup MarcoPoloAPI
  *
  * @apiParam {String} city Nome della città.
  *
@@ -243,7 +243,7 @@ app.ws('/chatbot', function(ws, req) {
  *        "cases":"84234",
  *        "region":"Lazio",
  *        "regionCases":78454,
- *         "isItalian":true
+ *        "isItalian":true
  *      }
  *
  * @apiError errore Messaggio di errore.
@@ -310,7 +310,6 @@ app.get("/covidData/:city", async function(req, res) {
         }
     }
     res.json(result);
-
 });
 
 app.listen(PORT, () => {
