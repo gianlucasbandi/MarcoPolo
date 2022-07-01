@@ -88,11 +88,9 @@ app.get("/login", (req, res) => {
 //SERV
 app.get("/nation", async function(req, res) {
 
-    if(req.session.logged == undefined){        //User not logged
+    if (req.session.logged == undefined) { //User not logged
         res.render("index", { logged: false });
-    }
-
-    else{
+    } else {
         var city = req.originalUrl.split("=")[1];
         var cases;
         var codNat;
@@ -166,7 +164,7 @@ app.get("/nation", async function(req, res) {
 
             //Se la città è italiana ricaviamo anche i dati relativi alla regione -->>>>
             if (nat == 'Italia') {
-                await getCovidDataItaly(reg) 
+                await getCovidDataItaly(reg)
                     .then(result => {
                         regionCases = result;
                         isThereRegion = true;
@@ -211,7 +209,42 @@ app.ws('/chatbot', function(ws, req) {
 /****************************************/
 /**********REST API*********************/
 /****************************************/
-app.get("/covidData/:city",async function(req,res){
+
+/**
+ * @api {get} /covidData/:city Richede dati covid
+ * @apiName covidData
+ * @apiGroup User
+ *
+ * @apiParam {String} city Nome della città.
+ *
+ * @apiSuccess {String} nation Nazione della città inserita.
+ * @apiSuccess {String} codNat Codice della nazione della città inserita.
+ * @apiSuccess {Int} cases Casi nazionali relativi alla città inserita.
+ * @apiSuccess {String} region Regione della città inserita (se italiana).
+ * @apiSuccess {Int} regionCases Casi regionali della città inserita (se italiana).
+ * @apiSuccess {Boolean} isItalian Indica se la città inserita è italiana.
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *        "nation":"Italia",
+ *        "codNat":"IT",
+ *        "cases":"84234",
+ *        "region":"Lazio",
+ *        "regionCases":78454,
+ *         "isItalian":true
+ *      }
+ *
+ * @apiError errore Messaggio di errore.
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "errore": "La città inserita non esiste"
+ *     }
+ * */
+
+app.get("/covidData/:city", async function(req, res) {
     var city = req.params.city;
     var nat;
     var codNat;
@@ -222,44 +255,49 @@ app.get("/covidData/:city",async function(req,res){
     var isThereRegion;
 
     await getGeoData(city)
-            .then(result => {
-                codNat = result[0];
-                nat = result[1];
-                reg = result[2];
-            })
-            .catch(err => {
-                cityErr = true;
-            });
-    
-    await getCovidData(codNat)
-    .then(result => {
-        cases = result;
-    })
-    .catch(error => {
-        cases = "ND";
-    });
+        .then(result => {
+            codNat = result[0];
+            nat = result[1];
+            reg = result[2];
+        })
+        .catch(err => {
+            cityErr = true;
+        });
 
-
-    if (nat == 'Italia') {
-        await getCovidDataItaly(reg) 
+    if (cityErr) {
+        var result = {
+            "errore": "La città inserita non esiste"
+        }
+    } else {
+        await getCovidData(codNat)
             .then(result => {
-                regionCases = result;
-                isThereRegion = true;
+                cases = result;
             })
             .catch(error => {
-                regionCasesError = true;
+                cases = "ND";
             });
-    }
 
-    var result = {
-        "nation":nat,
-        "codNat":codNat,
-        "cases":cases,
-        "region":reg,
-        "regionCases":regionCases,
-        "isItalian":isThereRegion
-    }
 
+        if (nat == 'Italia') {
+            await getCovidDataItaly(reg)
+                .then(result => {
+                    regionCases = result;
+                    isThereRegion = true;
+                })
+                .catch(error => {
+                    regionCasesError = true;
+                });
+        }
+
+        var result = {
+            "nation": nat,
+            "codNat": codNat,
+            "cases": cases,
+            "region": reg,
+            "regionCases": regionCases,
+            "isItalian": isThereRegion
+        }
+    }
     res.json(result);
 
 });

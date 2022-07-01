@@ -9,6 +9,7 @@
     "author": "Gianluca Sbandi & Claudio Schiavella & Mattia Russo",
     "license": "ISC",
     "dependencies": {
+        "apidoc": "^0.51.1",
         "chai": "^4.3.6",
         "chai-http": "^4.3.0",
         "cookie-parser": "^1.4.6",
@@ -28,5 +29,14 @@
         "twitter-api-v2": "^1.12.2",
         "websocket": "^1.0.34",
         "ws": "^8.8.0"
+    },
+    "apidoc": {
+        "name": "Document Name",
+        "version": "0.1.0",
+        "description": "Document Description",
+        "apidoc": {
+            "title": "This is the title displayed on the web page",
+            "url": "API base URL"
+        }
     }
 }
