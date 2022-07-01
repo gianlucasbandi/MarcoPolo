@@ -118,15 +118,6 @@ app.get("/nation", async function(req, res) {
         var json_tweets; //Recent tweet in that city
         var tweets_id;
 
-        /*await formatCityName(city)
-            .then(response => {
-                city = response;
-            })
-            .catch(error => {
-                city = error;
-            })
-            */
-
         //Searching the tweet posted in that city
         await getTweets(T, city)
             .then(response => {
@@ -184,6 +175,15 @@ app.get("/nation", async function(req, res) {
                         regionCasesError = true;
                     });
             }
+
+            await formatCityName(city)
+                .then(response => {
+                    city = response;
+                })
+                .catch(error => {
+                    city = error;
+                })
+
             res.render("home", { city: city, nation: nat, covidCases: cases, tweets_id: tweets_id, tweetError: tweetError, tweetMsgError: tweetMsgError, regione: reg, regCas: regionCases, regErr: regionCasesError, isReg: isThereRegion });
         }
     }

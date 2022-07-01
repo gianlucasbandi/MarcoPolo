@@ -1,6 +1,7 @@
 //const { request } = require("chai");
 const request = require('request');
 let nodeGeocoder = require('node-geocoder');
+const e = require('express');
 let options = {
     provider: 'openstreetmap',
 };
@@ -93,8 +94,26 @@ module.exports = {
     formatCityName: function(city) {
         return new Promise((resolve, reject) => {
             if (city == "") reject("None")
-            else if (city.includes("+")) resolve(city.replace('+', ' '));
-            else resolve(city)
+            var temp;
+            var out;
+
+            if (city.includes("+")) temp = city.replaceAll('+', ' ');
+            else temp = city
+
+            out = temp.split(" ")
+            temp = ""
+            if (out.length > 1) {
+                for (let i = 0; i < out.length; i++) {
+                    out[i] = out[i].charAt(0).toUpperCase() + out[i].slice(1).toLowerCase() + " ";
+                    if (i == out.length - 1) out[i] = out[i].charAt(0).toUpperCase() + out[i].slice(1).toLowerCase();
+                    temp += out[i]
+                }
+            } else {
+                out[0] = out[0].charAt(0).toUpperCase() + out[0].slice(1).toLowerCase();
+                temp += out[0]
+            }
+
+            resolve(temp);
         });
     }
 }
