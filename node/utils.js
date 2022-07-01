@@ -115,5 +115,48 @@ module.exports = {
 
             resolve(temp);
         });
+    },
+
+
+    getLessCasesCountry: function(){
+        return new Promise((resolve,reject)=>{
+            request.get({url:"https://corona-api.com/countries"},(error, response, body)=>{
+                if(error)reject(error);
+                //console.log(body);
+                var minCases;
+                var data = new Array();
+                var json_body = JSON.parse(body);
+                minCases = json_body.data[0].latest_data.confirmed;
+                for(let i = 0;i<json_body.data.length;i++){
+                    data.push(json_body.data[i]);
+                    if(json_body.data[i].latest_data.confirmed < minCases)minCases = json_body.data[i].latest_data.confirmed;
+                }
+                var result = data.find(element => element.latest_data.confirmed == minCases);
+                
+                resolve(result.name);
+                
+            });
+        });
+    },
+
+    getLessCasesItalianRegion: function(){
+        return new Promise((resolve,reject)=>{
+            request.get({ url: "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni-latest.json" }, (e, r, body) => {
+                if (e) reject(e);
+
+                var data_array = new Array();
+                var json_data = JSON.parse(body);
+                var minCases = json_data[0].nuovi_positivi;
+
+                for (let i = 0; i < json_data.length; i++) {
+                    data_array.push(json_data[i]);
+                    if(data_array[i].nuovi_positivi < minCases)minCases = data_array[i].nuovi_positivi;
+                }
+
+                var result = data_array.find(elem => elem.nuovi_positivi == minCases);
+                //console.log(data);
+                resolve(result.denominazione_regione);
+            });
+        });
     }
 }

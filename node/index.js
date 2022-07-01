@@ -7,7 +7,7 @@ const qs = require('querystring'); //To manage URL parsing
 var Twit = require('twit'); //To use twitter api
 const utils = require("./utils");
 const bodyParser = require('body-parser');
-const { getCovidData, getTweets, getTweetsUrl, tweet2HTML, getTweetsId, getCovidDataItaly, getGeoData, formatCityName } = require('./utils');
+const { getCovidData, getTweets, getTweetsUrl, tweet2HTML, getTweetsId, getCovidDataItaly, getGeoData, formatCityName, getLessCasesCountry, getLessCasesItalianRegion } = require('./utils');
 var OAuth = require('oauth'); //Twitter OAuth
 var session = require('express-session');
 const { response } = require('express');
@@ -201,10 +201,33 @@ app.get("/logout", (req, res) => {
 /******CHAT BOT*******/
 /*********************/
 app.ws('/chatbot', function(ws, req) {
-    ws.on('message', function(msg) {
+    ws.on('message', async function(msg) {
         switch (msg.toLowerCase()) {
+            case "1":
+                await getLessCasesCountry()
+                .then(result=>{
+                    ws.send(result);
+                    ws.send("Usare help per una breve guida sui comandi<br>");
+                })
+                .catch(error=>{
+                    ws.send(error);
+                    ws.send("Usare help per una breve guida sui comandi<br>");
+                });
+                break
+
+            case "2":
+                await getLessCasesItalianRegion()
+                .then(result=>{
+                    ws.send(result);
+                    ws.send("Usare help per una breve guida sui comandi<br>");
+                })
+                .catch(error=>{
+                    ws.send(error);
+                    ws.send("Usare help per una breve guida sui comandi<br>");
+                });
+                break;
             case "help":
-                ws.send("Queste sono le cose che puoi chiedermi:<br> -Cisanini <br>-Cisanini2 <br>-Cisanini3")
+                ws.send("Queste sono le cose che puoi chiedermi:<br> 1)Nazione con meno casi <br>2)Regione italiana con meno casi<br>");
                 break
             default:
                 ws.send("Comando non riconosciuto :(");
