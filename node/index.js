@@ -7,7 +7,7 @@ const qs = require('querystring'); //To manage URL parsing
 var Twit = require('twit'); //To use twitter api
 const utils = require("./utils");
 const bodyParser = require('body-parser');
-const { getCovidData, getTweets, getTweetsUrl, tweet2HTML, getTweetsId, getCovidDataItaly, getGeoData } = require('./utils');
+const { getCovidData, getTweets, getTweetsUrl, tweet2HTML, getTweetsId, getCovidDataItaly, getGeoData, formatCityName } = require('./utils');
 var OAuth = require('oauth'); //Twitter OAuth
 var session = require('express-session');
 const { response } = require('express');
@@ -118,6 +118,15 @@ app.get("/nation", async function(req, res) {
         var json_tweets; //Recent tweet in that city
         var tweets_id;
 
+        /*await formatCityName(city)
+            .then(response => {
+                city = response;
+            })
+            .catch(error => {
+                city = error;
+            })
+            */
+
         //Searching the tweet posted in that city
         await getTweets(T, city)
             .then(response => {
@@ -150,6 +159,8 @@ app.get("/nation", async function(req, res) {
             .catch(err => {
                 cityErr = true;
             })
+
+        console.log(codNat);
 
         if (cityErr) {
             res.render("index", { logged: true, username: req.session.user_name, error: "La città inserita non esiste" });

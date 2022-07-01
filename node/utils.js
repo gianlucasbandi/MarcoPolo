@@ -11,7 +11,7 @@ function isNumeric(str) {
     return /\d/.test(str);
 }
 
-var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+var format = /[ `!@#$%^&*()_\-=\[\]{};:"\\|,.<>\/?~]/;
 
 module.exports = {
     getCovidData: function(codNat) {
@@ -88,5 +88,13 @@ module.exports = {
                     });
             }
         })
+    },
+
+    formatCityName: function(city) {
+        return new Promise((resolve, reject) => {
+            if (city == "") reject("None")
+            else if (city.includes("+")) resolve(city.replace('+', ' '));
+            else resolve(city)
+        });
     }
 }
