@@ -205,26 +205,26 @@ app.ws('/chatbot', function(ws, req) {
         switch (msg.toLowerCase()) {
             case "1":
                 await getLessCasesCountry()
-                .then(result=>{
-                    ws.send(result);
-                    ws.send("Usare help per una breve guida sui comandi<br>");
-                })
-                .catch(error=>{
-                    ws.send(error);
-                    ws.send("Usare help per una breve guida sui comandi<br>");
-                });
+                    .then(result => {
+                        ws.send(result);
+                        ws.send("Usare help per una breve guida sui comandi<br>");
+                    })
+                    .catch(error => {
+                        ws.send(error);
+                        ws.send("Usare help per una breve guida sui comandi<br>");
+                    });
                 break
 
             case "2":
                 await getLessCasesItalianRegion()
-                .then(result=>{
-                    ws.send(result);
-                    ws.send("Usare help per una breve guida sui comandi<br>");
-                })
-                .catch(error=>{
-                    ws.send(error);
-                    ws.send("Usare help per una breve guida sui comandi<br>");
-                });
+                    .then(result => {
+                        ws.send(result);
+                        ws.send("Usare help per una breve guida sui comandi<br>");
+                    })
+                    .catch(error => {
+                        ws.send(error);
+                        ws.send("Usare help per una breve guida sui comandi<br>");
+                    });
                 break;
             case "help":
                 ws.send("Queste sono le cose che puoi chiedermi:<br> 1)Nazione con meno casi <br>2)Regione italiana con meno casi<br>");
@@ -278,6 +278,7 @@ app.ws('/chatbot', function(ws, req) {
  *     }
  * */
 
+// Restituisce casi covid città
 app.get("/covidData/:city", async function(req, res) {
     var city = req.params.city;
     var nat;
@@ -333,6 +334,85 @@ app.get("/covidData/:city", async function(req, res) {
         }
     }
     res.json(result);
+});
+
+
+/**
+ * @api {get} /lessCase città con meno casi nel mondo
+ * @apiName lessCase
+ * @apiGroup MarcoPoloAPI
+ *
+ * @apiSuccess {String} city Città con meno casi nel mondo
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *        "city": "Ascoli Piceno"
+ *     }
+ *
+ * @apiError errore Messaggio di errore.
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "errore": "errore"
+ *     }
+ * */
+
+// Restituisce città con meno casi covid nel mondo
+app.get("/lessCase", async function(req, res) {
+    getLessCasesCountry()
+        .then(result => {
+            var out = {
+                reg: result
+            }
+            res.json(out);
+        })
+        .catch(error => {
+            var out = {
+                reg: "errore"
+            }
+            res.json(out);
+        });
+});
+
+/**
+ * @api {get} /regionLessCase Regione italiana con meno casi
+ * @apiName regionLessCase
+ * @apiGroup MarcoPoloAPI
+ *
+ * @apiSuccess {String} reg Regione italiana con meno casi
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *        "reg": "Campania"
+ *     }
+ *
+ * @apiError errore Messaggio di errore.
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "errore": "errore"
+ *     }
+ * */
+
+// Restituisce regione italiana con meno casi covid
+app.get("/regionLessCase", async function(req, res) {
+    getLessCasesItalianRegion()
+        .then(result => {
+            var out = {
+                city: result
+            }
+            res.json(out);
+        })
+        .catch(error => {
+            var out = {
+                city: "errore"
+            }
+            res.json(out);
+        });
 });
 
 app.listen(PORT, () => {
