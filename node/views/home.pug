@@ -8,6 +8,7 @@ html
     link(rel='stylesheet', href='/css/home.css')
     script(src='https://kit.fontawesome.com/d8697e016e.js' crossorigin='anonymous')
     script(async src="https://platform.twitter.com/widgets.js" charset="utf-8")
+    script(src="./js/maps.js") 
     meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
     meta(name="twitter:widgets:theme" content="light")
     meta(name="twitter:widgets:border-color" content="#55acee")
@@ -23,7 +24,6 @@ html
               p= tweetMsgError       
 
       #maps
-        h1 Qui ci va la mappa
 
       .covid
           .city
@@ -46,3 +46,4 @@ html
       #back
         a(class="back-btn", href="https://localhost:8083") Fai un'altra ricerca! 
           i.fas.fa-redo
+    script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDTKbH0rBg9XMfpeQuM7WwJZL9AO300YhE&callback=initMap')
