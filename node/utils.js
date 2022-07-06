@@ -1,12 +1,8 @@
 //const { request } = require("chai");
 const request = require('request');
-let nodeGeocoder = require('node-geocoder');
 const e = require('express');
-let options = {
-    provider: 'openstreetmap',
-};
-
-let geoCoder = nodeGeocoder(options);
+const { Client } = require("@googlemaps/google-maps-services-js");
+const client = new Client({});
 
 function isNumeric(str) {
     return /\d/.test(str);
@@ -15,7 +11,7 @@ function isNumeric(str) {
 var format = /[ `!@#$%^&*()_\-=\[\]{};:"\\|,.<>\/?~]/;
 
 module.exports = {
-    getCovidData: function(codNat) {
+    getCovidData: function (codNat) {
         return new Promise((resolve, reject) => {
             request.get({ url: "https://corona-api.com/countries/" + codNat }, (error, response, body) => {
                 if (error) {
@@ -28,7 +24,7 @@ module.exports = {
     },
 
     //Function to get recent tweets posted in a city
-    getTweets: function(T, city) {
+    getTweets: function (T, city) {
         return new Promise((resolve, reject) => {
             T.get('search/tweets', { q: city, count: 4, result_type: "recent", lang: "it" }, (err, data, response) => {
                 if (err) reject("Search failed");
@@ -38,7 +34,7 @@ module.exports = {
     },
 
     //Getting the ids of each tweets (json format)
-    getTweetsId: function(json_tweets) {
+    getTweetsId: function (json_tweets) {
         return new Promise((resolve, reject) => {
             if (json_tweets.statuses.length == 0) reject("No tweets found");
             var res = [];
@@ -50,7 +46,7 @@ module.exports = {
         });
     },
 
-    getCovidDataItaly: function(region) {
+    getCovidDataItaly: function (region) {
         return new Promise((resolve, reject) => {
             request.get({ url: "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni-latest.json" }, (e, r, body) => {
                 if (e) reject(e);
@@ -70,28 +66,50 @@ module.exports = {
         });
     },
 
-    getGeoData: function(city) {
+    getGeoData: function (city) {
         return new Promise((resolve, reject) => {
             if (isNumeric(city) || format.test(city)) reject("La città inserita non esiste");
             else {
-                geoCoder.geocode(city)
-                    .then((result) => {
-                        if (result[0].country == 'Italia') {
-                            var reg = result[0].state;
-                        } else {
-                            var reg = "none";
+                client
+                    .geocode({
+                        params: {
+                            address: city,
+                            key: 'AIzaSyDTKbH0rBg9XMfpeQuM7WwJZL9AO300YhE'
                         }
-                        var out = [result[0].countryCode, result[0].country, reg];
+                    })
+                    .then((res) => {
+                        var lun = res.data.results[0].address_components.length;
+                        var add = res.data.results[0].address_components;
+
+                        if (add[lun - 1].types == 'postal_code') {
+                          var country = add[lun - 2].long_name;
+                          var id = add[lun - 2].short_name;
+                          if (country == 'Italy') {
+                            var reg = add[lun - 3].long_name;
+                          } else {
+                            var reg = "none";
+                          }
+                        } else {
+                          var country = add[lun - 1].long_name;
+                          var id = add[lun - 1].short_name;
+                          if (country == 'Italy') {
+                            var reg = add[lun - 2].long_name;
+                          } else {
+                            var reg = "none";
+                          }
+                        }
+
+                        var out = [id, country, reg, res.data.results[0].geometry.location.lat, res.data.results[0].geometry.location.lng];
                         resolve(out);
                     })
                     .catch((err) => {
-                        reject("La città inserita non esiste");
+                        reject("La città inserita non esiste " + err);
                     });
             }
         })
     },
 
-    formatCityName: function(city) {
+    formatCityName: function (city) {
         return new Promise((resolve, reject) => {
             if (city == "") reject("None")
             var temp;
@@ -118,7 +136,7 @@ module.exports = {
     },
 
 
-    getLessCasesCountry: function() {
+    getLessCasesCountry: function () {
         return new Promise((resolve, reject) => {
             request.get({ url: "https://corona-api.com/countries" }, (error, response, body) => {
                 if (error) reject(error);
@@ -139,7 +157,7 @@ module.exports = {
         });
     },
 
-    getLessCasesItalianRegion: function() {
+    getLessCasesItalianRegion: function () {
         return new Promise((resolve, reject) => {
             request.get({ url: "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni-latest.json" }, (e, r, body) => {
                 if (e) reject(e);
