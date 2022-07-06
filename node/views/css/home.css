@@ -55,7 +55,7 @@ h1 {
     overflow-y:scroll;
 }
 
-#maps {
+.map {
     width: 100%;
     height: 100%;
     border-radius: 15px;

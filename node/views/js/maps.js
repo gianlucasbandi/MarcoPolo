@@ -1,14 +1,19 @@
 function initMap() {
-    // The location
-    const location = { lat: 41.9100711, lng: 12.5359979 };
-    // The map, centered at location
-    const map = new google.maps.Map(document.getElementById("maps"), {
+  var location;
+  var city = req.originalUrl.split("=")[1];
+  console.log(city);
+  getGeoData(city)
+            .then(result => {
+                location = result[3];
+                console.log(location);
+            })
+            .catch(err => {
+                cityErr = true;
+            })
+  var div_map = document.getElementById('map');
+    const map = new google.maps.Map(div_map, {
       zoom: 10,
       center: location,
     });
-    // The marker, positioned at location
-    const marker = new google.maps.Marker({
-      position: { lat: 41.9100711, lng: 12.5359979 },
-      map: map,
-    });
+
   }
