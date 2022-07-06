@@ -92,6 +92,8 @@ app.get("/nation", async function(req, res) {
         res.render("index", { logged: false });
     } else {
         var city = req.originalUrl.split("=")[1];
+        var lat;
+        var lng;
         var cases;
         var codNat;
         var nat;
@@ -146,6 +148,8 @@ app.get("/nation", async function(req, res) {
                 codNat = result[0];
                 nat = result[1];
                 reg = result[2];
+                lat = result[3];
+                lng = result[4];
             })
             .catch(err => {
                 cityErr = true;
@@ -165,7 +169,19 @@ app.get("/nation", async function(req, res) {
                 })
 
             //Se la città è italiana ricaviamo anche i dati relativi alla regione -->>>>
-            if (nat == 'Italia') {
+            if (nat == 'Italy') {
+
+                if(reg=='Lombardy') reg = 'Lombardia';
+                if(reg=='Piedmont') reg = 'Piemonte';
+                if(reg=='Apulia') reg = 'Puglia';
+                if(reg=='Tuscany') reg = 'Toscana';
+                if(reg=='Aosta') reg = "Valle d'Aosta";
+                if(reg=='Sardinia') reg = "Sardegna";
+                if(reg=='Sicily') reg = "Sicilia";
+                if(reg=='Friuli-Venezia Giulia') reg = "Friuli Venezia Giulia";
+                if(reg=='Trentino-South Tyrol') reg = "P.A. Trento";
+                
+
                 await getCovidDataItaly(reg)
                     .then(result => {
                         regionCases = result;
@@ -183,8 +199,7 @@ app.get("/nation", async function(req, res) {
                 .catch(error => {
                     city = error;
                 })
-
-            res.render("home", { city: city, nation: nat, covidCases: cases, tweets_id: tweets_id, tweetError: tweetError, tweetMsgError: tweetMsgError, regione: reg, regCas: regionCases, regErr: regionCasesError, isReg: isThereRegion });
+            res.render("home", { city: city, nation: nat, lat: lat, lng: lng, covidCases: cases, tweets_id: tweets_id, tweetError: tweetError, tweetMsgError: tweetMsgError, regione: reg, regCas: regionCases, regErr: regionCasesError, isReg: isThereRegion });
         }
     }
 });

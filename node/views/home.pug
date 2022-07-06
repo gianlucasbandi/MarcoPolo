@@ -22,8 +22,7 @@ html
           else 
               p= tweetMsgError       
 
-      #maps
-        h1 Qui ci va la mappa
+      #map
 
       .covid
           .city
@@ -31,7 +30,7 @@ html
             p= city
           .nation
             p(class="title") Nazione:
-            p= nation
+            p= nation         
           .stats
             p(class="title") Casi:
             p= covidCases
@@ -46,3 +45,20 @@ html
       #back
         a(class="back-btn", href="https://localhost:8083") Fai un'altra ricerca! 
           i.fas.fa-redo
+      
+      script.
+          function initMap() {
+            var lat = parseFloat("#{lat}");
+            var lng = parseFloat("#{lng}");
+            var location = { lat: lat, lng: lng };
+            const map = new google.maps.Map(document.getElementById("map"),{
+              zoom: 10,
+              center: location,
+            });
+            new google.maps.Marker({
+              map: map,
+              position: location,
+            });
+          }
+    script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTKbH0rBg9XMfpeQuM7WwJZL9AO300YhE&callback=initMap") 
+    
