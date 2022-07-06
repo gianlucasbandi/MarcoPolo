@@ -204,6 +204,11 @@ app.ws('/chatbot', function(ws, req) {
     ws.on('message', async function(msg) {
         switch (msg.toLowerCase()) {
             case "1":
+                ws.send("- Accedi con Twitter");
+                ws.send("- Inserisci una città nella barra di ricerca e premi \"Cerca!\"");
+                ws.send("- Ottieni info geografiche, casi covid e tweets della città inserita!");
+                break;
+            case "2":
                 await getLessCasesCountry()
                     .then(result => {
                         ws.send(result);
@@ -215,7 +220,7 @@ app.ws('/chatbot', function(ws, req) {
                     });
                 break
 
-            case "2":
+            case "3":
                 await getLessCasesItalianRegion()
                     .then(result => {
                         ws.send(result);
@@ -227,7 +232,8 @@ app.ws('/chatbot', function(ws, req) {
                     });
                 break;
             case "help":
-                ws.send("Queste sono le cose che puoi chiedermi:<br> 1)Nazione con meno casi <br>2)Regione italiana con meno casi<br>");
+                ws.send("Queste sono le cose che puoi chiedermi:<br> 1)Come funziona il sito <br>2)Nazione con meno casi <br>3)Regione italiana con meno casi<br>");
+                ws.send("Inserisci il numero corrispondente alla tua richiesta");
                 break
             default:
                 ws.send("Comando non riconosciuto :(");
