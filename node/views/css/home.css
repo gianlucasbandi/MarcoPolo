@@ -1,5 +1,6 @@
 body {
     font-family: Georgia, 'Times New Roman', Times, serif;
+    overflow: hidden;
 }
 
 h1 {
@@ -12,10 +13,16 @@ h1 {
     align-items: center;
     justify-content: center;*/
     display: grid;
-    grid-template-columns: repeat(2,1fr);
-    margin: 3% 2% 3% 3%;
-    gap: 5%;
+    height: 100%;
+    grid-template-columns: repeat(2, 1fr);
+    margin: 1% 2% 2% 2%;
+    gap: 3%;
+    background-color: #1DA1F2;
+    padding: 2%;
+    padding-bottom: 5%;
+    border-radius: 15px;
 }
+
 
 /*
 #data {
@@ -28,17 +35,20 @@ h1 {
 */
 
 .covid {
-    margin-top: 4%;
-    margin-right: 3%;
+    margin-top: 2%;
+    margin-bottom: 1%;
     display: flex;
     flex-direction: row;
-    column-gap: 15%;
-    /*background-color: red;*/
+    column-gap: 7%;
+    background-color: white;
     border-radius: 15px;
     padding-left: 1%;
     padding-right: 1%;
     grid-column: 1/3;
-
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 .covid h1 {
@@ -46,31 +56,61 @@ h1 {
 }
 
 .tweets {
-    /*background-color: aqua;*/
-    width: 100%;
+    /*background-color: rgb(183, 255, 255);*/
+    width: 85%;
     height: 450px;
-    padding: 2px;
-    margin-right: 3%;
+    padding: 1% 2% 1% 2%;
     border-radius: 15px;
-    overflow-y:scroll;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow-y: scroll;
+}
+
+
+/* width */
+
+.tweets::-webkit-scrollbar {
+    width: 20px;
+}
+
+
+/* Track */
+
+.tweets::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+}
+
+
+/* Handle */
+
+.tweets::-webkit-scrollbar-thumb {
+    background: rgb(255, 255, 255);
+    border-radius: 10px;
+}
+
+
+/* Handle on hover */
+
+.tweets::-webkit-scrollbar-thumb:hover {
+    background: #a4a4a4;
 }
 
 .map {
     width: 100%;
     height: 100%;
-    border-radius: 15px;
 }
 
 .city,
 .nation,
 .stats,
 .regionName,
-.regionCases{
+.regionCases {
     display: flex;
     flex-direction: row;
 }
 
-.title{
+.title {
     font-weight: 700;
 }
 
