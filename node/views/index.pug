@@ -33,12 +33,13 @@ html
             a(class="logbtn", href="https://localhost:8083/login") Accedi con Twitter!              
               i.fa-brands.fa-twitter
 
-          .chatbot 
+          .chatbot
+            .chat-head
+              h1 Marco Polo Chatbot
             .chat 
               ul(id ="chatbotUL") 
 
             .sendMSG
               form(class="send-form")
-                input(type="text" placeholder="..." id="inputMsg" autocomplete="off")
+                input(type="text" placeholder="Inserisci il tuo messaggio" id="inputMsg" autocomplete="off")
                 input(type="submit" class="send-btn" id="inputSubmit" value="Invia")
-          

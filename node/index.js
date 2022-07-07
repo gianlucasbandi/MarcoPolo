@@ -171,16 +171,16 @@ app.get("/nation", async function(req, res) {
             //Se la città è italiana ricaviamo anche i dati relativi alla regione -->>>>
             if (nat == 'Italy') {
 
-                if(reg=='Lombardy') reg = 'Lombardia';
-                if(reg=='Piedmont') reg = 'Piemonte';
-                if(reg=='Apulia') reg = 'Puglia';
-                if(reg=='Tuscany') reg = 'Toscana';
-                if(reg=='Aosta') reg = "Valle d'Aosta";
-                if(reg=='Sardinia') reg = "Sardegna";
-                if(reg=='Sicily') reg = "Sicilia";
-                if(reg=='Friuli-Venezia Giulia') reg = "Friuli Venezia Giulia";
-                if(reg=='Trentino-South Tyrol') reg = "P.A. Trento";
-                
+                if (reg == 'Lombardy') reg = 'Lombardia';
+                if (reg == 'Piedmont') reg = 'Piemonte';
+                if (reg == 'Apulia') reg = 'Puglia';
+                if (reg == 'Tuscany') reg = 'Toscana';
+                if (reg == 'Aosta') reg = "Valle d'Aosta";
+                if (reg == 'Sardinia') reg = "Sardegna";
+                if (reg == 'Sicily') reg = "Sicilia";
+                if (reg == 'Friuli-Venezia Giulia') reg = "Friuli Venezia Giulia";
+                if (reg == 'Trentino-South Tyrol') reg = "P.A. Trento";
+
 
                 await getCovidDataItaly(reg)
                     .then(result => {
@@ -257,7 +257,7 @@ app.ws('/chatbot', function(ws, req) {
 
 
     //console.log("Ricevuta connessione ws");
-    ws.send("Benvenuto sull'assistenza di MarcoPolo.<br>Usare help per una breve guida ai comandi");
+    ws.send("Benvenuto sull'assistenza di Marco Polo.<br>Usare <b>help</b> per una breve guida ai comandi");
 });
 
 
