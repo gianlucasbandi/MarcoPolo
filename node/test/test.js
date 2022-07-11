@@ -27,3 +27,27 @@ describe("test that verify if the covidData API works",function(){
         });
     });
 });
+
+
+//Test API: get lessCase
+describe("test that verify if the lessCase API works",function(){
+    it("should return a json file unempty",function(done){
+        chai.request("https://localhost:8083").get("/lessCase").end(function(err,res){
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            done();
+        });
+    });
+});
+
+
+//Test API: get regionLessCase
+describe("test that verify if the regionLessCase API works",function(){
+    it("should return a json file unempty",function(done){
+        chai.request("https://localhost:8083").get("/regionLessCase").end(function(err,res){
+            expect(res).to.have.status(200);
+            expect(res).to.be.json;
+            done();
+        });
+    });
+});
