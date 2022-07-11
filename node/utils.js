@@ -1,8 +1,11 @@
 //const { request } = require("chai");
+require('dotenv').config();
 const request = require('request');
 const e = require('express');
 const { Client } = require("@googlemaps/google-maps-services-js");
 const client = new Client({});
+
+const { GOOGLE_MAPS_API_KEY } = process.env;
 
 function isNumeric(str) {
     return /\d/.test(str);
@@ -74,7 +77,7 @@ module.exports = {
                     .geocode({
                         params: {
                             address: city,
-                            key: 'AIzaSyDTKbH0rBg9XMfpeQuM7WwJZL9AO300YhE'
+                            key: GOOGLE_MAPS_API_KEY
                         }
                     })
                     .then((res) => {
