@@ -9,6 +9,8 @@ Nel primo caso bisogna inserire una località, a questo punto si verrà reindiri
 
 E' possibile effettuare un'altra ricerca cliccando sul tasto predisposto in fondo alla pagina.
 
+## Architettura
+![Architettura progetto](./Architettura.jpg)
 
 ## Tecnologie utilizzate
 
