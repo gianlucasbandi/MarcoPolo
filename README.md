@@ -5,9 +5,9 @@ Come **Marco Polo** riportò la relazione dei suoi viaggi in Estremo Oriente, il
 
 Dopo aver effettuato l'accesso a **Twitter** tramite la propria email e password, si ha la possibiltà di effettuare una ricerca o di porre delle domande al bot *Marco*.
 
-Nel primo caso bisogna inserire una località, a questo punto si verrà reindirizzati su un'altra pagina ottenendo gli ultimi twit di quella zona, una mappa di **Google Maps** con un marcatore sul luogo e la situazione pandemica in merito al **Covid-19**.
+Nel primo caso bisogna inserire una località, a questo punto si verrà reindirizzati su un'altra pagina ottenendo gli ultimi tweets di quella zona, una mappa di **Google Maps** con un marcatore sul luogo e la situazione pandemica in merito al **Covid-19**.
 
-E' possibile effettuare un'altra ricerca cliccando sul tasto predistosto in fondo alla pagina.
+E' possibile effettuare un'altra ricerca cliccando sul tasto predisposto in fondo alla pagina.
 
 
 ## Tecnologie utilizzate
@@ -26,13 +26,16 @@ La nostra webapp:
 1. Offre API, in particolare è possibile:
     - Trovare città con meno casi nel mondo
     - Trovare regione italiana con meno casi
+    - Richiedere i casi di una città e, se italiana, anche i casi della sua regione
 2. Si interfaccia con 3 servizi REST esterni, di cui 2 di tipo 'commerciale':
     - Twitter: utilizzo tramite la libreria 'twit', OAuth tramite la libreria 'oauth'
     - Google Maps: utilizzo tramite la libreria '@googlemaps/google-maps-services-js'
     - About-Corona
 3. Fa uso del protocollo asincrono:
     - WebSocket: utilizzando il protocollo wss
-4. Utilizza Docker e docker-compose per la gestione dei singoli container e il loro insieme, automatizzando la preparazione del necessario (installazione moduli, building dei container etc) al fine di garantire il corretto funzionamento del tutto e possibilità di testare.
+4. Utilizza Docker e docker-compose:
+    - Gestione dei singoli container e il loro insieme, automatizzando la preparazione del necessario (installazione moduli, building dei container etc) al fine di garantire il corretto funzionamento del tutto
+    - Possibilità di fare testing.
 5. Implementa Github Actions per:
     - Testing automatico delle funzionalità ad ogni 'push'
 6. Accetta solo richieste https autorizzate tramite l'utilizzo di self-signed certificate.
