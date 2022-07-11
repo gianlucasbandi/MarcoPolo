@@ -52,13 +52,35 @@ html
             var lng = parseFloat("#{lng}");
             var location = { lat: lat, lng: lng };
             const map = new google.maps.Map(document.getElementById("map"),{
-              zoom: 10,
+              zoom: 13,
               center: location,
             });
-            new google.maps.Marker({
-              map: map,
-              position: location,
-            });
+            var request = {
+              location: location,
+              radius: '1000',
+              query: 'attractions'
+            };
+          
+            service = new google.maps.places.PlacesService(map);
+            service.textSearch(request, callback);
+            function callback(results, status) {
+              if (status == google.maps.places.PlacesServiceStatus.OK) {
+                for (var i = 0; i < 10 ; i++) {
+                  var infoWindow = new google.maps.InfoWindow()
+                      const marker = new google.maps.Marker({
+                        position: results[i].geometry.location,
+                        map,
+                        _myValue : results[i].name,
+                        animation: google.maps.Animation.DROP,
+                      });
+                      marker.addListener("click", () => {
+                        infoWindow.close();
+                        infoWindow.setContent(marker._myValue);
+                        infoWindow.open(marker.getMap(), marker);
+                      });
+                }
+              }
+            }
           }
-    script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTKbH0rBg9XMfpeQuM7WwJZL9AO300YhE&callback=initMap") 
+    script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTKbH0rBg9XMfpeQuM7WwJZL9AO300YhE&libraries=places&callback=initMap") 
     
