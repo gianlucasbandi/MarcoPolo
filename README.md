@@ -5,7 +5,7 @@ Come **Marco Polo** riportò la relazione dei suoi viaggi in Estremo Oriente, il
 
 Dopo aver effettuato l'accesso a **Twitter** tramite la propria email e password, si ha la possibiltà di effettuare una ricerca o di porre delle domande al bot *Marco*.
 
-Nel primo caso bisogna inserire una località, a questo punto si verrà reindirizzati su un'altra pagina ottenendo gli ultimi tweets di quella zona, una mappa di **Google Maps** con un marcatore sul luogo e la situazione pandemica in merito al **Covid-19**.
+Nel primo caso bisogna inserire una località, a questo punto si verrà reindirizzati su un'altra pagina ottenendo gli ultimi tweets di quella zona, una mappa di **Google Maps** con un marcatore sul luogo e la situazione pandemica in merito al **Covid-19** e nel caso in cui sia una località italiana, anche della sua regione.
 
 E' possibile effettuare un'altra ricerca cliccando sul tasto predisposto in fondo alla pagina.
 
