@@ -7,7 +7,7 @@ const qs = require('querystring'); //To manage URL parsing
 var Twit = require('twit'); //To use twitter api
 const utils = require("./utils");
 const bodyParser = require('body-parser');
-const { getCovidData, getTweets, getTweetsUrl, tweet2HTML, getTweetsId, getCovidDataItaly, getGeoData, formatCityName, getLessCasesCountry, getLessCasesItalianRegion } = require('./utils');
+const { getCovidData, getTweets, getTweetsUrl, tweet2HTML, getTweetsId, getCovidDataItaly, getGeoData, formatCityName, getLessCasesCountry, getLessCasesItalianRegion, getTopRatedRandomCity } = require('./utils');
 var OAuth = require('oauth'); //Twitter OAuth
 var session = require('express-session');
 const { response } = require('express');
@@ -91,7 +91,7 @@ app.get("/nation", async function(req, res) {
     if (req.session.logged == undefined) { //User not logged
         res.render("index", { logged: false });
     } else {
-        var city = req.originalUrl.split("=")[1];
+        var city = req.originalUrl.split("=")[1].split("%2C")[0];
         var lat;
         var lng;
         var cases;
@@ -154,8 +154,6 @@ app.get("/nation", async function(req, res) {
             .catch(err => {
                 cityErr = true;
             })
-
-        console.log(codNat);
 
         if (cityErr) {
             res.render("index", { logged: true, username: req.session.user_name, error: "La città inserita non esiste" });
@@ -246,8 +244,26 @@ app.ws('/chatbot', function(ws, req) {
                         ws.send("Usare help per una breve guida sui comandi<br>");
                     });
                 break;
+
+            case "4":
+                await getTopRatedRandomCity()
+                    .then(result => {
+                        var string = '';
+                        string += '<h1>' + result[0][1]+ '</h1><br>';
+                        for (let i = 1; i < Math.min(10,result.length); i++) {
+                            string += result[i][0] + ': ' + result[i][1] + '<br><br>';
+                        }
+                        console.log(string);
+                        ws.send(string);
+                        ws.send("Usare help per una breve guida sui comandi<br>");
+                    })
+                    .catch(error => {
+                        ws.send(error);
+                        ws.send("Usare help per una breve guida sui comandi<br>");
+                    });
+                break;
             case "help":
-                ws.send("Queste sono le cose che puoi chiedermi:<br> 1)Come funziona il sito <br>2)Nazione con meno casi <br>3)Regione italiana con meno casi<br>");
+                ws.send("Queste sono le cose che puoi chiedermi:<br> 1)Come funziona il sito <br>2)Nazione con meno casi <br>3)Regione italiana con meno casi<br>4)I luoghi con rating più alto di una provincia italiana random<br>");
                 ws.send("Inserisci il numero corrispondente alla tua richiesta");
                 break
             default:

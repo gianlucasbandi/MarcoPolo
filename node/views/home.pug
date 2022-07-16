@@ -66,15 +66,13 @@ html
             function callback(results, status) {
               if (status == google.maps.places.PlacesServiceStatus.OK) {
                 var res = Array();
-                console.log(results);
                 for (var i = 0; i < results.length ; i++) {
-                  if(results[i].user_ratings_total >= 100){
+                  if(results[i].user_ratings_total >= 50){
                     res.push([results[i].rating,results[i]]);
                   }
                 }
                 res.sort().reverse();
                 for (var i = 0; i < Math.min(10,res.length); i++) {
-                  console.log(res[i][1].name);
                   var infoWindow = new google.maps.InfoWindow();
                       const marker = new google.maps.Marker({
                         position: res[i][1].geometry.location,

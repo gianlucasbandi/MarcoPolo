@@ -21,7 +21,7 @@ html
         #search 
           if logged 
             form(action="https://localhost:8083/nation" method = "GET")
-              input(type="text", placeholder="Inserisci una città", name="nat", id="prova", autocomplete="off" required)
+              input(type="text", placeholder="Inserisci una città", name="nat", id="autocomplete", autocomplete="off" required)
               p= error 
               input(type="submit", value="Cerca!")
         #utils
@@ -43,3 +43,12 @@ html
               form(class="send-form")
                 input(type="text" placeholder="Inserisci il tuo messaggio" id="inputMsg" autocomplete="off")
                 input(type="submit" class="send-btn" id="inputSubmit" value="Invia")
+    script.
+        function initAutocomplete() {
+          new google.maps.places.Autocomplete(
+            document.getElementById('autocomplete'),
+            {
+              fields : ['name']
+            });
+        }  
+    script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTKbH0rBg9XMfpeQuM7WwJZL9AO300YhE&libraries=places&callback=initAutocomplete") 

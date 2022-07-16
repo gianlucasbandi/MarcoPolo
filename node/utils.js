@@ -4,6 +4,8 @@ const request = require('request');
 const e = require('express');
 const { Client } = require("@googlemaps/google-maps-services-js");
 const client = new Client({});
+var Chance = require('chance');
+var chance = new Chance();
 
 const { GOOGLE_MAPS_API_KEY } = process.env;
 
@@ -13,7 +15,7 @@ function isNumeric(str) {
 
 var format = /[ `!@#$%^&*()_\-=\[\]{};:"\\|,.<>\/?~]/;
 
-module.exports = {
+var func = module.exports = {
     getCovidData: function (codNat) {
         return new Promise((resolve, reject) => {
             request.get({ url: "https://corona-api.com/countries/" + codNat }, (error, response, body) => {
@@ -73,10 +75,12 @@ module.exports = {
         return new Promise((resolve, reject) => {
             if (isNumeric(city) || format.test(city)) reject("La città inserita non esiste");
             else {
+              
                 client
                     .geocode({
                         params: {
                             address: city,
+                            region: 'IT',
                             key: GOOGLE_MAPS_API_KEY
                         }
                     })
@@ -85,21 +89,21 @@ module.exports = {
                         var add = res.data.results[0].address_components;
 
                         if (add[lun - 1].types == 'postal_code') {
-                          var country = add[lun - 2].long_name;
-                          var id = add[lun - 2].short_name;
-                          if (country == 'Italy') {
-                            var reg = add[lun - 3].long_name;
-                          } else {
-                            var reg = "none";
-                          }
+                            var country = add[lun - 2].long_name;
+                            var id = add[lun - 2].short_name;
+                            if (country == 'Italy') {
+                                var reg = add[lun - 3].long_name;
+                            } else {
+                                var reg = "none";
+                            }
                         } else {
-                          var country = add[lun - 1].long_name;
-                          var id = add[lun - 1].short_name;
-                          if (country == 'Italy') {
-                            var reg = add[lun - 2].long_name;
-                          } else {
-                            var reg = "none";
-                          }
+                            var country = add[lun - 1].long_name;
+                            var id = add[lun - 1].short_name;
+                            if (country == 'Italy') {
+                                var reg = add[lun - 2].long_name;
+                            } else {
+                                var reg = "none";
+                            }
                         }
 
                         var out = [id, country, reg, res.data.results[0].geometry.location.lat, res.data.results[0].geometry.location.lng];
@@ -110,6 +114,43 @@ module.exports = {
                     });
             }
         })
+    },
+
+    getTopRatedRandomCity: function () {
+        return new Promise((resolve, reject) => {
+            var citta = chance.province({ country: 'it', full: true });
+            var arr;
+            func.getGeoData(citta)
+                .then(coord => {
+                    client
+                        .textSearch({
+                            params: {
+                                location: { lat: parseFloat(coord[3]), lng: parseFloat(coord[4]) },
+                                radius: '1000',
+                                query: 'attraction',
+                                key: GOOGLE_MAPS_API_KEY
+                            }
+                        })
+                        .then((res) => {
+                            try {
+                                arr = Array();
+                                arr.push(['citta', citta]);
+                                for (var i = 0; i < res.data.results.length; i++) {
+                                    if (res.data.results[i].user_ratings_total >= 100) {
+                                        arr.push([res.data.results[i].rating , res.data.results[i].name ]);
+                                    }
+                                }
+                                arr.sort().reverse();
+                                resolve(arr);
+                            } catch (error) {
+                                console.log(error);
+                            }
+                        });
+                })
+                .catch(err => {
+                    reject(err);
+                });
+        });
     },
 
     formatCityName: function (city) {
@@ -179,5 +220,5 @@ module.exports = {
                 resolve(result.denominazione_regione);
             });
         });
-    }
+    },
 }
