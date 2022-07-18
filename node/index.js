@@ -251,7 +251,7 @@ app.ws('/chatbot', function(ws, req) {
                         var string = '';
                         string += '<h1>' + result[0][1]+ '</h1><br>';
                         for (let i = 1; i < Math.min(10,result.length); i++) {
-                            string += result[i][0] + ': ' + result[i][1] + '<br><br>';
+                            string += result[i][1] + ': ' + result[i][0] + '<br><br>';
                         }
                         console.log(string);
                         ws.send(string);
