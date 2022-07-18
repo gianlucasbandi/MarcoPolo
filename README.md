@@ -5,7 +5,7 @@ Come **Marco Polo** riportò la relazione dei suoi viaggi in Estremo Oriente, il
 
 Dopo aver effettuato l'accesso a **Twitter** tramite la propria email e password, si ha la possibiltà di effettuare una ricerca o di porre delle domande al bot *Marco*.
 
-Nel primo caso bisogna inserire una località, a questo punto si verrà reindirizzati su un'altra pagina ottenendo gli ultimi tweets di quella zona, una mappa di **Google Maps** con un marcatore sul luogo e la situazione pandemica in merito al **Covid-19** e nel caso in cui sia una località italiana, anche della sua regione.
+Nel primo caso bisogna inserire una località, a questo punto si verrà reindirizzati su un'altra pagina ottenendo gli ultimi tweets di quella zona, una mappa di **Google Maps** con dei marcatori sui luoghi di interesse rating più alto e la situazione pandemica in merito al **Covid-19** e nel caso in cui sia una località italiana, anche della sua regione.
 
 E' possibile effettuare un'altra ricerca cliccando sul tasto predisposto in fondo alla pagina.
 
@@ -38,7 +38,7 @@ La nostra webapp:
     - WebSocket: utilizzando il protocollo wss
 4. Utilizza Docker e docker-compose:
     - Gestione dei singoli container e il loro insieme, automatizzando la preparazione del necessario (installazione moduli, building dei container etc) al fine di garantire il corretto funzionamento del tutto
-    - Possibilità di fare testing.
+    - Possibilità di fare testing
 5. Implementa Github Actions per:
     - Testing automatico delle funzionalità ad ogni 'push'
 6. Accetta solo richieste https autorizzate tramite l'utilizzo di self-signed certificate.
