@@ -255,8 +255,8 @@ app.ws('/chatbot', function(ws, req) {
                 await getTopRatedRandomCity()
                     .then(result => {
                         var string = '';
-                        string += '<h1>' + result[0][1]+ '</h1><br>';
-                        for (let i = 1; i < Math.min(10,result.length); i++) {
+                        string += '<h1>' + result[0][1] + '</h1><br>';
+                        for (let i = 1; i < Math.min(10, result.length); i++) {
                             string += result[i][1] + ': ' + result[i][0] + '<br><br>';
                         }
                         console.log(string);
@@ -381,7 +381,7 @@ app.get("/covidData/:city", async function(req, res) {
 
 
 /**
- * @api {get} /lessCase città con meno casi nel mondo
+ * @api {get} /lessCase Città con meno casi nel mondo
  * @apiName lessCase
  * @apiGroup MarcoPoloAPI
  *
@@ -535,8 +535,8 @@ app.get("/topRatedRandomCity", async function(req, res) {
         .then(result => {
             '{"name":"John", "age":30, "city":"New York"}'
             var string = '';
-            string += '{"citta":"' + result[0][1]+ '"';
-            for (var i = 1; i < Math.min(10,result.length); i++) {
+            string += '{"citta":"' + result[0][1] + '"';
+            for (var i = 1; i < Math.min(10, result.length); i++) {
                 string += ', "' + result[i][1] + '":' + result[i][0];
             }
             string += '}';
