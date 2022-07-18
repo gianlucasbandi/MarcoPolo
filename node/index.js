@@ -17,12 +17,6 @@ const { basename } = require('path');
 const PORT = 3000;
 const app = express();
 
-app.engine('html', require('ejs').renderFile);
-
-app.get("/apidoc", (req, res, next) => {
-    res.render('apidoc.html');
-});
-
 var expressWs = require('express-ws')(app);
 
 const { TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_CALL_BACK_URL } = process.env; //Rivavo le credenziali Twitter
@@ -39,6 +33,7 @@ var TwitterOAuth = new OAuth.OAuth(
 //Getting static file and pug's views
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
+app.engine('html', require('ejs').renderFile);
 app.use(express.static(__dirname + '/views'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
@@ -71,6 +66,11 @@ app.get("/", (req, res) => {
         res.render("index", { logged: true, username: req.session.user_name });
     }
 
+});
+
+
+app.get("/apidoc", (req, res) => {
+    res.render('apidoc.html');
 });
 
 
