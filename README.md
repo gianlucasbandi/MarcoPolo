@@ -29,6 +29,7 @@ La nostra webapp:
     - Trovare città con meno casi nel mondo
     - Trovare regione italiana con meno casi
     - Richiedere i casi di una città e, se italiana, anche i casi della sua regione
+    - Generare una provincia italiana random e mostrare le sue 10 località con rating più alto
 2. Si interfaccia con 3 servizi REST esterni, di cui 2 di tipo 'commerciale':
     - Twitter: utilizzo tramite la libreria 'twit', OAuth tramite la libreria 'oauth'
     - Google Maps: utilizzo tramite la libreria '@googlemaps/google-maps-services-js'
