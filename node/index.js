@@ -17,6 +17,12 @@ const { basename } = require('path');
 const PORT = 3000;
 const app = express();
 
+app.engine('html', require('ejs').renderFile);
+
+app.get("/apidoc", (req, res, next) => {
+    res.render('apidoc.html');
+});
+
 var expressWs = require('express-ws')(app);
 
 const { TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_CALL_BACK_URL } = process.env; //Rivavo le credenziali Twitter
