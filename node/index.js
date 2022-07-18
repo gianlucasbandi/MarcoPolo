@@ -533,7 +533,6 @@ app.get("/lessCase", async function(req, res) {
 app.get("/topRatedRandomCity", async function(req, res) {
     getTopRatedRandomCity()
         .then(result => {
-            '{"name":"John", "age":30, "city":"New York"}'
             var string = '';
             string += '{"citta":"' + result[0][1]+ '"';
             for (var i = 1; i < Math.min(10,result.length); i++) {
@@ -547,7 +546,7 @@ app.get("/topRatedRandomCity", async function(req, res) {
             var out = {
                 errore: "errore"
             }
-            res.json(out);
+            res.json(error);
         });
 });
 

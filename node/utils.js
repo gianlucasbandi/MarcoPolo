@@ -13,8 +13,6 @@ function isNumeric(str) {
     return /\d/.test(str);
 }
 
-var format = /[ `!@#$%^&*()_\-=\[\]{};:"\\|,.<>\/?~]/;
-
 var func = module.exports = {
     getCovidData: function (codNat) {
         return new Promise((resolve, reject) => {
@@ -73,9 +71,8 @@ var func = module.exports = {
 
     getGeoData: function (city) {
         return new Promise((resolve, reject) => {
-            if (isNumeric(city) || format.test(city)) reject("La città inserita non esiste");
-            else {
-              
+            if (isNumeric(city)) reject("La città inserita non esiste");
+            else { 
                 client
                     .geocode({
                         params: {
@@ -143,7 +140,7 @@ var func = module.exports = {
                                 arr.sort().reverse();
                                 resolve(arr);
                             } catch (error) {
-                                console.log(error);
+                                reject(error);
                             }
                         });
                 })
