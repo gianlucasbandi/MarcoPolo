@@ -492,7 +492,7 @@ app.get("/lessCase", async function(req, res) {
 });
 
 /**
- * @api {get} /getTopRatedRandomCity I luoghi con rating più alto di una provincia italiana random
+ * @api {get} /topRatedRandomCity I luoghi con rating più alto di una provincia italiana random
  * @apiName topRatedRandomCity
  * @apiGroup MarcoPoloAPI
  *
