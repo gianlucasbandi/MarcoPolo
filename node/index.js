@@ -452,6 +452,99 @@ app.get("/regionLessCase", async function(req, res) {
         });
 });
 
+/**
+ * @api {get} /lessCase città con meno casi nel mondo
+ * @apiName lessCase
+ * @apiGroup MarcoPoloAPI
+ *
+ * @apiSuccess {String} city Città con meno casi nel mondo
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *        "city": "Ascoli Piceno"
+ *     }
+ *
+ * @apiError errore Messaggio di errore.
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "errore": "errore"
+ *     }
+ * */
+
+// Restituisce città con meno casi covid nel mondo
+app.get("/lessCase", async function(req, res) {
+    getLessCasesCountry()
+        .then(result => {
+            var out = {
+                reg: result
+            }
+            res.json(out);
+        })
+        .catch(error => {
+            var out = {
+                reg: "errore"
+            }
+            res.json(out);
+        });
+});
+
+/**
+ * @api {get} /getTopRatedRandomCity I luoghi con rating più alto di una provincia italiana random
+ * @apiName topRatedRandomCity
+ * @apiGroup MarcoPoloAPI
+ *
+ * @apiSuccess {String} citta generata random
+ * @apiSuccess {Int} rating luogo e il suo rating
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *        "citta": "Brescia",
+ *        "Santa Giulia Museum":4.7,
+ *        "Old Cathedral":4.7,
+ *        "Capitolium o Tempio Capitolino":4.7,
+ *        "Cathedral of Santa Maria Assunta":4.6,
+ *        "Castle of Brescia":4.6,
+ *        "Piazza della Vittoria":4.5,
+ *        "Movieland Studios":4.5,
+ *        "Palazzo Broletto":4.4,
+ *        "Piazza del Mercato":4.3
+ *     }
+ *
+ * @apiError errore Messaggio di errore.
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "errore": "errore"
+ *     }
+ * */
+
+// Restituisce regione italiana con meno casi covid
+app.get("/topRatedRandomCity", async function(req, res) {
+    getTopRatedRandomCity()
+        .then(result => {
+            '{"name":"John", "age":30, "city":"New York"}'
+            var string = '';
+            string += '{"citta":"' + result[0][1]+ '"';
+            for (var i = 1; i < Math.min(10,result.length); i++) {
+                string += ', "' + result[i][1] + '":' + result[i][0];
+            }
+            string += '}';
+            var out = JSON.parse(string);
+            res.json(out);
+        })
+        .catch(error => {
+            var out = {
+                errore: "errore"
+            }
+            res.json(out);
+        });
+});
+
 app.listen(PORT, () => {
     console.log("Applicazione in ascolto sulla porta " + PORT);
 });
