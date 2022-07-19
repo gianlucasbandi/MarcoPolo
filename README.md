@@ -1,7 +1,7 @@
 
 # Marco Polo
 
-Come **Marco Polo** riportò la relazione dei suoi viaggi in Estremo Oriente, il nostro servizio si propone di riportare le informazioni sulla situazione pandemica e sulle immagini più recenti della zona di interesse per un possibile turista.
+Come **Marco Polo** riportò la relazione dei suoi viaggi in Estremo Oriente, il nostro servizio si propone di riportare le informazioni sulla situazione pandemica e sui tweets più recenti della zona di interesse per un possibile turista.
 
 Dopo aver effettuato l'accesso a **Twitter** tramite la propria email e password, si ha la possibiltà di effettuare una ricerca o di porre delle domande al bot *Marco*.
 
